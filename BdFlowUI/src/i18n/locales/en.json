@@ -1,0 +1,21 @@
+{
+  "translation": {
+    "level": "Level",
+    "limit": "Limit",
+    "pressure": "Pressure",
+    "separatorLayer": "Separator Layer",
+    "intensity": "Intensity",
+    "massFlow": "Mass Flow",
+    "gas":"Gas",
+    "liquid":"Liquid",
+    "navigation.menu.home": "Home",
+    "navigation.menu.products": "Products",
+    "navigation.menu.communication": "Communication",
+    "navigation.menu.about": "About",
+    "header.lang": "TR",
+    "body.select.product": "Find The Sensor That Suits You",
+    "body.stepper.choose.material": "Please select the material to be measured.",
+    "body.stepper.choose.environment": "Select the environment to be measured.",
+    "body.stepper.choose.list": "Products You Can Choose"
+  }
+}

@@ -1,0 +1,30 @@
+
+{
+  "meta": {
+    "method": "GET",
+    "path": "/todos",
+    "statusCode": 200,
+    "delay": 1000
+  },
+  "response": [
+      {
+        "userId": 1,
+        "id": 1,
+        "title": "delectus aut autem",
+        "completed": false
+      },
+      {
+        "userId": 2,
+        "id": 2,
+        "title": "delectus aut autem",
+        "completed": false
+      },
+      {
+        "userId": 3,
+        "id": 3,
+        "title": "delectus aut autem",
+        "completed": false
+      }
+    ]
+  
+}

@@ -1,0 +1,21 @@
+.chooseEnvironment {
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+    gap: 20px;
+  
+    &__environments {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 2px solid grey;
+      border-radius: 5px;
+      padding: 10px;
+
+      &--selected{
+        background-color:#ececec;
+        border: 5px solid #944c4c;
+      }
+    }
+  }
+  

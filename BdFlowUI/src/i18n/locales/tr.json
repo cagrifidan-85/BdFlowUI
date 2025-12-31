@@ -1,0 +1,21 @@
+{
+  "translation": {
+    "level": "Seviye",
+    "limit": "Limit",
+    "pressure": "Basınç",
+    "separatorLayer": "Ayırıcı Katman",
+    "intensity": "Yoğunluk",
+    "massFlow": "Debi Akış",
+    "gas":"Gaz",
+    "liquid":"Sıvı",
+    "navigation.menu.home": "Ana Sayfa",
+    "navigation.menu.products": "Ürünler",
+    "navigation.menu.communication": "İletişim",
+    "navigation.menu.about": "Hakkında",
+    "header.lang": "EN",
+    "body.select.product": "Sana Uygun Sensörü Bul",
+    "body.stepper.choose.material": "Ölçüm Yapılacak Malzemeyi Seçiniz",
+    "body.stepper.choose.environment": "Ortamı Seçiniz",
+    "body.stepper.choose.list": "Seçebileceğiniz Ürünler"
+  }
+}

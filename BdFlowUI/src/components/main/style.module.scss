@@ -1,0 +1,14 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  overflow: hidden;
+
+    &__loader{
+        display: flex;
+        justify-content: center;
+        padding-top: 100px;
+    }
+}
