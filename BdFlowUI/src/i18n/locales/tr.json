@@ -16,6 +16,12 @@
     "body.select.product": "Sana Uygun Sensörü Bul",
     "body.stepper.choose.material": "Ölçüm Yapılacak Malzemeyi Seçiniz",
     "body.stepper.choose.environment": "Ortamı Seçiniz",
-    "body.stepper.choose.list": "Seçebileceğiniz Ürünler"
+    "body.stepper.choose.list": "Seçebileceğiniz Ürünler",
+    "order.products": "Sırala",
+    "order.price": "Fiyata göre",
+    "order.name": "İsme göre",
+    "order.mostPopular": "En Popüler",
+    "product.details": "Detay",
+    "product.addToCart": "Sepete Ekle"
   }
 }

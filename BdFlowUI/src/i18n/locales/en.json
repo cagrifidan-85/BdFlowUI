@@ -16,6 +16,12 @@
     "body.select.product": "Find The Sensor That Suits You",
     "body.stepper.choose.material": "Please select the material to be measured.",
     "body.stepper.choose.environment": "Select the environment to be measured.",
-    "body.stepper.choose.list": "Products You Can Choose"
+    "body.stepper.choose.list": "Products You Can Choose",
+    "order.products": "Order",
+    "order.price": "By Price",
+    "order.name": "By Name",
+    "order.mostPopular": "Most Popular",
+    "product.details": "Details",
+    "product.addToCart": "Add to Cart"
   }
 }

@@ -96,16 +96,12 @@ function ColorlibStepIcon(props: StepIconProps) {
   );
 }
 interface StepperProps {
+  currentStep: number;
   onStepChanged: (value: number) => void;
 }
 
-const Steppers: React.FC<StepperProps> = ({ onStepChanged }) => {
+const Steppers: React.FC<StepperProps> = ({ currentStep, onStepChanged }) => {
   const { t } = useTranslation();
-  const [activeStep, setActiveStep] = React.useState(0);
-
-  React.useEffect(() => {
-    onStepChanged(activeStep);
-  }, [activeStep]);
 
   const steps = [
     {
@@ -122,14 +118,13 @@ const Steppers: React.FC<StepperProps> = ({ onStepChanged }) => {
     },
   ];
   const handleActiveStepChanged = (index: number) => {
-    setActiveStep(index);
     onStepChanged(index);
   };
   return (
     <Stack className={styles.stepper}>
       <Stepper
         alternativeLabel
-        activeStep={activeStep}
+        activeStep={currentStep}
         connector={<ColorlibConnector />}
         nonLinear
       >

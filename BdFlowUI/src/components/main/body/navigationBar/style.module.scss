@@ -11,8 +11,10 @@
     display: flex;
     padding-left: 100px;
     width: 100%;
-    background-color:rgb(178 178 178);
+    color: white;
+    background-color: #035a90;
     gap: 20px;
+    
     &Item {
       display: flex;
       gap: 5px;

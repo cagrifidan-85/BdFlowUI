@@ -1,0 +1,17 @@
+.productList {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    
+    &__filter {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    &__items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+}

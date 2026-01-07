@@ -1,8 +1,16 @@
 .chooseMaterial {
   display: flex;
-  justify-content: center;
-  padding-top: 50px;
-  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+
+  &__container {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
 
   &__materials {
     display: flex;
@@ -15,6 +23,24 @@
     &--selected{
       background-color:#ececec;
       border: 5px solid #944c4c;
+    }
+  }
+
+  &__navigation {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  &__navigationBtn {
+    background: linear-gradient(136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%) !important;
+    color: white !important;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,.3);
     }
   }
 }

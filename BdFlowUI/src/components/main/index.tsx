@@ -36,11 +36,10 @@ export const Main = () => {
     <Box className={styles.main} >
       <Header currentLang={lang} onChangeLang={handleChangeLang} />
       {lang !== null ? (
-        <>
-  
+        <Box className={styles.main__content}>
           <Body />
           <Footer />
-        </>
+        </Box>
       ) : (
         <Box className={styles.main__loader}>
           <CircularProgress />
