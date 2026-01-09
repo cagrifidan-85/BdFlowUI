@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import ProductCard from '../Product';
-import { Box, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { Box, Select, MenuItem, InputLabel, FormControl, Typography } from '@mui/material';
 import { ProductType } from '@constants/index';
 import styles from './style.module.scss';
 import { useTranslation } from "react-i18next";
-
+import ProductDetailModal from './ProductDetailModal';
+import noDataImage from '@images/noData.png';
 
 type SortKey = 'price' | 'name' | 'bestSeller';
 
@@ -17,18 +18,27 @@ interface ProductListProps {
 const ProductList: React.FC<ProductListProps> = ({ products }) => {
     const { t } = useTranslation();
     const [sortKey, setSortKey] = useState<SortKey>('name');
+    const [selectedProduct, setSelectedProduct] = useState<ProductType | undefined>(undefined);
 
+    const [isOpenDetailModal, setIsOpenDetailModal] = useState<boolean>(false);
     const sortedProducts = [...products].sort((a, b) => {
         if (sortKey === 'price') return a.price - b.price;
         if (sortKey === 'name') return a.name.localeCompare(b.name);
         if (sortKey === 'bestSeller') return (b.bestSeller ? 1 : 0) - (a.bestSeller ? 1 : 0);
         return 0;
-    });
+    })
+
+    const handleDetailClick = (data: ProductType) => {
+        setSelectedProduct(data)
+        setIsOpenDetailModal(true);
+    }
 
     return (
+
         <Box className={styles.productList}>
             <Box className={styles.productList__filter}>
-                <FormControl sx={{ minWidth: 180, mb: 2 }}>
+                <Typography variant="h6" fontWeight="bold">{t('productsheader')} {` ( ${products.length} )`} </Typography>
+                <FormControl className={styles.productList__filterControl} size="small">
                     <InputLabel id="sort-label">{t('order.products')}</InputLabel>
                     <Select
                         labelId="sort-label"
@@ -43,10 +53,18 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
                 </FormControl>
             </Box>
             <Box className={styles.productList__items}>
-                {sortedProducts.map((product, idx) => (
-                    <ProductCard key={product.name + idx} {...product} />
-                ))}
+                {sortedProducts.length > 0 ? sortedProducts.map((product, idx) => (
+                    <ProductCard key={product.name + idx} product={product} onDetails={(data) => handleDetailClick(data)} />
+                )) :
+                    <Box className={styles.productList__noData}>
+                        <Box className={styles.productList__noDataContent}>
+                            <img src={noDataImage} alt='No Data' width={120} height={200} />
+                            <Typography variant='h6' color='error'>{t('productList.noData')}</Typography>
+                        </Box>
+                    </Box>}
+
             </Box>
+            <ProductDetailModal open={selectedProduct !== undefined && isOpenDetailModal} onClose={() => setIsOpenDetailModal(false)} product={selectedProduct} />
         </Box>
     );
 };

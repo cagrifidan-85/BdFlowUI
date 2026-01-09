@@ -16,7 +16,8 @@
     "noEmit": true,
     "jsx": "preserve",
     "paths": {
-      "@img/*": ["./logos/*"],
+      "@logos/*": ["./src/logos/*"],
+      "@images/*": ["./src/images/*"],
       "@apis/*": ["./src/apis/*"],
       "@components/*": ["./src/components/*"],
       "@constants/*": ["./src/constants/*"],

@@ -1,13 +1,12 @@
 .chooseMaterial {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
   gap: 2rem;
 
   &__container {
     display: flex;
     justify-content: center;
-    margin-top: 50px;
     gap: 20px;
     flex-wrap: wrap;
   }
@@ -28,7 +27,8 @@
 
   &__navigation {
     display: flex;
-    justify-content: center;
+    width: 100%;
+    justify-content:flex-end ;
     gap: 1rem;
     margin-top: 1rem;
   }

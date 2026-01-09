@@ -9,13 +9,16 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ChooseMaterial from "./chooseMaterial";
 import ChooseEnvironment from "./chooseEnvironment";
 import ChooseProduct from "./chooseProduct";
+import { EnvironmentType, MaterialType } from "@constants/index";
 
 interface CalculateProductProps {
-  onSelectMaterial: (value: string) => void;
-  onSelectEnvironment: (value: string) => void;
+  onSelectMaterial: (value: MaterialType) => void;
+  onSelectEnvironment: (value: EnvironmentType) => void;
   onSelectProduct: (value: string) => void;
   isSelectionActive: boolean
   onSelectionActive: (value: boolean) => void
+  material?:MaterialType
+  environment?:EnvironmentType
 }
 
 
@@ -24,7 +27,9 @@ const CalculateProduct: React.FC<CalculateProductProps> = ({
   onSelectEnvironment,
   onSelectProduct,
   isSelectionActive,
-  onSelectionActive
+  onSelectionActive,
+  material,
+  environment
 
 }) => {
   const { t } = useTranslation();
@@ -46,8 +51,8 @@ const CalculateProduct: React.FC<CalculateProductProps> = ({
   return (
 
     <Box className={styles.calculateProduct} >
-      <Collapse className={styles.calculateProduct__collapse} in={isSelectionActive} >
-        <Steppers currentStep={currentStep} onStepChanged={(active) => setCurrentStep(active)} />
+      <Collapse className={styles.calculateProduct__collapse} in={isSelectionActive}  >
+        <Steppers currentStep={currentStep}  onStepChanged={(active) => setCurrentStep(active)} />
         <Collapse in={currentStep === 0} >
           <ChooseMaterial onItemSelected={(value) => onSelectMaterial(value)} onNext={handleNext} />
         </Collapse>
@@ -55,7 +60,7 @@ const CalculateProduct: React.FC<CalculateProductProps> = ({
           <ChooseEnvironment onItemSelected={(value) => onSelectEnvironment(value)} onNext={handleNext} onBack={handleBack} />
         </Collapse>
         <Collapse in={currentStep === 2}>
-          <ChooseProduct onItemSelected={(value: string) => onSelectProduct(value)} onBack={handleBack} />
+          <ChooseProduct onItemSelected={(value: string) => onSelectProduct(value)} onBack={handleBack}  material={material} environment={environment} />
         </Collapse>
       </Collapse>
     </Box>

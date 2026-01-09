@@ -4,9 +4,10 @@ import { useTranslation } from "react-i18next";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import styles from "./style.module.scss";
 import classnames from 'classnames/bind'
+import { MaterialType } from "@constants/index";
 
 interface ChooseMaterialProps {
-  onItemSelected: (value: string) => void;
+  onItemSelected: (value: MaterialType) => void;
   onNext?: () => void;
 }
 
@@ -14,57 +15,51 @@ const cx = classnames.bind(styles)
 
 const ChooseMaterial: React.FC<ChooseMaterialProps> = ({ onItemSelected, onNext }) => {
   const { t } = useTranslation();
-  const [itemSelected,setItemSelected]= useState<string>("")
-
-  const materials = [
-    { id: "level", text: t("level") },
-    { id: "limit", text: t("limit") },
-    { id: "pressure", text: t("pressure") },
-    { id: "separatorLayer", text: t("separatorLayer") },
-    { id: "intensity", text: t("intensity") },
-    { id: "massFlow", text: t("massFlow") },
-  ];
+  const [itemSelected,setItemSelected]= useState<MaterialType>()
 
 
-  const handleItemSelect =(id:string)=>{
 
-    setItemSelected(id)
 
-    onItemSelected(id)
+  const handleItemSelect =(item:MaterialType)=>{
+
+    setItemSelected(item)
+
+    onItemSelected(item)
   }
   return (
     <Box className={styles.chooseMaterial}>
       <Box className={styles.chooseMaterial__container}>
-        {materials.map((item) => (
+        {Object.values(MaterialType).map((item) => (
           <Box
-            key={item.id}
+            key={item.toString()} 
             className={cx('chooseMaterial__materials', {
-              'chooseMaterial__materials--selected': itemSelected===item.id,
+              'chooseMaterial__materials--selected': itemSelected===item,
             })}
-            onClick={() =>handleItemSelect(item.id)}
+            onClick={() =>handleItemSelect(item)}
           >
             <img
-              key={item.id}
+              key={item.toString()}
               src={require("../../../../../../src/logos/materials/" +
-                item.id +
+                item.toString() +
                 ".png")}
               loading="lazy"
               width={100}
               height={120}
-              title="materials"
+              title={t(item.toLocaleLowerCase())}
             />
-            <Typography>{item.text}</Typography>
+            <Typography>{t(item.toLocaleLowerCase())}</Typography>
           </Box>
         ))}
       </Box>
-      {itemSelected && onNext && (
+      {  onNext && (
         <Box className={styles.chooseMaterial__navigation}>
           <IconButton 
             onClick={onNext}
             className={styles.chooseMaterial__navigationBtn}
             size="large"
+            disabled={!itemSelected}
           >
-            <ArrowForwardIcon fontSize="large" />
+            <ArrowForwardIcon fontSize="large" color={itemSelected ? 'inherit' : 'disabled'} />
           </IconButton>
         </Box>
       )}

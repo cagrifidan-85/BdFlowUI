@@ -10,6 +10,8 @@ module.exports = {
       '@i18n': path.resolve(__dirname, 'src/i18n/'),
       '@pages': path.resolve(__dirname, 'src/pages/'),
       '@utils': path.resolve(__dirname, 'src/utils/'),
+      '@images': path.resolve(__dirname, 'src/images/'),
+      '@logos': path.resolve(__dirname, 'src/logos/'),
       '@img': path.resolve(__dirname, 'logos/')
     }
   },

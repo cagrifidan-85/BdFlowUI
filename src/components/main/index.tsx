@@ -29,7 +29,7 @@ export const Main = () => {
 
 //  const {data, isLoading} =useGetTodosQuery()
 
-//   console.log('data',isLoading, data)
+
 
 
   return (

@@ -118,7 +118,7 @@ const Steppers: React.FC<StepperProps> = ({ currentStep, onStepChanged }) => {
     },
   ];
   const handleActiveStepChanged = (index: number) => {
-    onStepChanged(index);
+    //  onStepChanged(index);
   };
   return (
     <Stack className={styles.stepper}>

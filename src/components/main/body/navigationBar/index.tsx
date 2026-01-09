@@ -1,6 +1,6 @@
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import React, { useState } from "react";
-import logo from "../../../../logos/navigationLogo.jpg";
+import logo from "@images/navigationLogo.jpg";
 import styles from "./style.module.scss";
 import {
   Home,

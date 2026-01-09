@@ -3,7 +3,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import logo from "../../../logos/navigationLogo.jpg";
+import logo from "@images/navigationLogo.jpg";
 import styles from "./style.module.scss"
 
 const Footer = () => {
@@ -12,9 +12,9 @@ const Footer = () => {
       <Box className={styles.footer__row}>
         <Box className={styles.footer__rowColLeft}>
             <Box className={styles.footer__rowColLeftTitleBox}>
-              <img src={logo} alt="BdFlow Logo" className={styles.footer__rowColLeftLogo} />
+              <img src={logo} alt="BdFlow Logo"  className={styles.footer__rowColLeftLogo} />
             </Box>
-            <Typography variant="body2" className={styles.footer__rowColLeftBrand}>
+            <Typography  className={styles.footer__rowColLeftBrand}>
               Endüstriyel otomasyon ve sensör teknolojilerinde yenilikçi çözümler sunuyoruz. Güvenilirlik ve kaliteyle işinizi ileriye taşıyın.
             </Typography>
         </Box>

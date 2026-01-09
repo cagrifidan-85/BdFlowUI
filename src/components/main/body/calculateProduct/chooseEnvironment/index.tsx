@@ -5,10 +5,11 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import styles from "./style.module.scss";
 import classnames from 'classnames/bind'
+import { EnvironmentType } from "@constants/index";
 
 
 interface ChooseEnvironmentProps {
-    onItemSelected: (value: string) => void;
+    onItemSelected: (value: EnvironmentType) => void;
     onNext?: () => void;
     onBack?: () => void;
 }
@@ -17,46 +18,43 @@ const cx = classnames.bind(styles)
 
 const ChooseEnvironment: React.FC<ChooseEnvironmentProps> = ({ onItemSelected, onNext, onBack }) => {
     const { t } = useTranslation();
-    const [selectedEnvironment,setSelectedEnvironment]= useState<string>()
+    const [selectedEnvironment,setSelectedEnvironment]= useState<EnvironmentType>()
 
-    const materials = [
-        { id: "gas", text: t("gas") },
-        { id: "liquid", text: t("liquid") }
-    ];
+  
 
-    const handleItemSelect =(id:string)=>{
+    const handleItemSelect =(item:EnvironmentType)=>{
 
-        setSelectedEnvironment(id)
+        setSelectedEnvironment(item)
     
-        onItemSelected(id)
+        onItemSelected(item)
       }
     return (
         <Box className={styles.chooseEnvironment}>
             <Box className={styles.chooseEnvironment__container}>
-                {materials.map((item) => (
+                {Object.values(EnvironmentType).map((item) => (
                     <Box
-                        key={item.id}
+                        key={item}
                         className={cx('chooseEnvironment__environments', {
-                            'chooseEnvironment__environments--selected': selectedEnvironment===item.id,
+                            'chooseEnvironment__environments--selected': selectedEnvironment===item,
                           })}
                       
-                        onClick={() => handleItemSelect(item.id)}
+                        onClick={() => handleItemSelect(item)}
                     >
                         <img
-                            key={item.id}
+                            key={item}
                             src={require("../../../../../../src/logos/environments/" +
-                                item.id +
+                                item.toString() +
                                 ".png")}
                             loading="lazy"
                             width={100}
                             height={120}
-                            title="environments"
+                            title={t(item.toLocaleLowerCase().toString())}
                         />
-                        <Typography>{item.text}</Typography>
+                        <Typography>{t(item.toLocaleLowerCase())}</Typography>
                     </Box>
                 ))}
             </Box>
-            {selectedEnvironment && (
+            {(
                 <Box className={styles.chooseEnvironment__navigation}>
                     {onBack && (
                         <IconButton 
@@ -72,8 +70,9 @@ const ChooseEnvironment: React.FC<ChooseEnvironmentProps> = ({ onItemSelected, o
                             onClick={onNext}
                             className={styles.chooseEnvironment__navigationBtn}
                             size="large"
+                            disabled={!selectedEnvironment}
                         >
-                            <ArrowForwardIcon fontSize="large" />
+                            <ArrowForwardIcon fontSize="large" color={selectedEnvironment ? 'inherit' : 'disabled'} />
                         </IconButton>
                     )}
                 </Box>

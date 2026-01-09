@@ -1,9 +1,10 @@
-import { Box, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, IconButton, Typography } from '@mui/material';
+import { Box, Select, IconButton, Typography, Link, FormControl, MenuItem } from '@mui/material';
 import React from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import styles from './style.module.scss';
-import { FilterTypes } from '@constants/index';
+import { EnvironmentType, FilterTypes, MaterialType, ProductType } from '@constants/index';
 import ProductList from '@components/common/ProductList';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -11,61 +12,15 @@ import ProductList from '@components/common/ProductList';
 interface ChooseProductProps {
     onItemSelected?: (value: string) => void;
     onBack?: () => void;
+    material?: MaterialType;
+    environment?: EnvironmentType;
 }
 
 
 
-const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
-    const [checked, setChecked] = React.useState([false, false])
+const ChooseProduct = ({ onItemSelected, onBack, material, environment }: ChooseProductProps) => {
+    const { t } = useTranslation();
     const [filters, setFilters] = React.useState<{ filter: FilterTypes, value: string }[]>([])
-    const handleChange1 = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setChecked([event.target.checked, event.target.checked]);
-    }
-
-    const handleChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setChecked([event.target.checked, checked[1]]);
-    }
-
-    const handleChange3 = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setChecked([checked[0], event.target.checked]);
-    }
-
-    const renderMenu = (title: string, childrenItems?: string[]) => {
-        const children = (
-            <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
-
-                {childrenItems?.map((childItem) => (
-                    <FormControlLabel
-                        key={childItem}
-                        label={childItem}
-                        control={<Checkbox checked={checked[0]} onChange={handleChange2} />}
-                    />
-                ))}
-
-            </Box>
-        )
-
-
-
-        return (
-            <Box>
-
-                <FormControlLabel
-                    label={title}
-                    control={
-                        <Checkbox
-                            checked={checked[0] && checked[1]}
-                            indeterminate={checked[0] !== checked[1]}
-                            onChange={handleChange1}
-                        />
-                    }
-                />
-                {children}
-            </Box>
-        );
-
-    }
-
 
     const handleChange = (filterType: FilterTypes, value: string) => {
         setFilters(prevFilters => {
@@ -82,7 +37,9 @@ const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
             [FilterTypes.ConnectionType]: 'Bağlantı Tipi',
             [FilterTypes.Properties]: 'Özellikler',
             [FilterTypes.Others]: 'Diğer',
-            [FilterTypes.Electronics]: 'Elektronik'
+            [FilterTypes.Electronics]: 'Elektronik',
+
+
         };
 
         return (
@@ -97,7 +54,7 @@ const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
                         displayEmpty
                         className={styles.chooseProduct__select}
                     >
-                        <MenuItem value="">Tümü</MenuItem>
+                        <MenuItem value="">{t('all')}</MenuItem>
                         {items.map((item) => (
                             <MenuItem key={item} value={item}>
                                 {item}
@@ -105,6 +62,7 @@ const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
                         ))}
                     </Select>
                 </FormControl>
+
             </Box>
         )
     }
@@ -120,7 +78,10 @@ const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
             sensor: "Sensor1",
             connectionType: "Type1",
             properties: "Property1",
-            electronics: "Standard1"
+            electronics: "Standard1",
+            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+            material: "Level",
+            environment: "Gas"
         },
         {
             name: "Seviye Sensörü B",
@@ -132,7 +93,10 @@ const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
             sensor: "Sensor2",
             connectionType: "Type2",
             properties: "Property2",
-            electronics: "Standard2"
+            electronics: "Standard2",
+            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+            material: "Limit",
+            environment: "Liquid"
         },
         {
             name: "Seviye Anahtarı C",
@@ -144,7 +108,10 @@ const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
             sensor: "Sensor1",
             connectionType: "Type3",
             properties: "Property3",
-            electronics: "Standard1"
+            electronics: "Standard1",
+            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+            material: "Pressure",
+            environment: "Gas"
         },
         {
             name: "Mikrodalga Sensör D",
@@ -156,7 +123,10 @@ const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
             sensor: "Sensor3",
             connectionType: "Type1",
             properties: "Property1",
-            electronics: "Standard3"
+            electronics: "Standard3",
+            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+            material: "Intensity",
+            environment: "Liquid"
         },
         {
             name: "Radar Sensör E",
@@ -168,7 +138,10 @@ const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
             sensor: "Sensor2",
             connectionType: "Type2",
             properties: "Property2",
-            electronics: "Standard2"
+            electronics: "Standard2",
+            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+            material: "MassFlow",
+            environment: "Gas"
         },
         {
             name: "Basınç Sensörü F",
@@ -180,7 +153,10 @@ const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
             sensor: "Sensor1",
             connectionType: "Type2",
             properties: "Property3",
-            electronics: "Standard3"
+            electronics: "Standard3",
+            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+            material: "SeparatorLayer",
+            environment: "Liquid"
         },
         {
             name: "Akıllı Seviye Sensörü G",
@@ -192,7 +168,10 @@ const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
             sensor: "Sensor3",
             connectionType: "Type3",
             properties: "Property1",
-            electronics: "Standard2"
+            electronics: "Standard2",
+            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+            material: "Level",
+            environment: "Liquid"
         },
         {
             name: "Kompakt Sensör H",
@@ -204,7 +183,71 @@ const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
             sensor: "Sensor2",
             connectionType: "Type1",
             properties: "Property2",
-            electronics: "Standard1"
+            electronics: "Standard1",
+            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+            material: "Limit",
+            environment: "Gas"
+        },
+        {
+            name: "Endüstriyel Sensör I",
+            type: "Mikrodalga Seviye Sensörü",
+            image: "/images/4.png",
+            measurementRange: "0 ... 100 m",
+            description: "Zorlu endüstriyel ortamlara dayanıklı.",
+            price: 4000,
+            sensor: "Sensor1",
+            connectionType: "Type3",
+            properties: "Property3",
+            electronics: "Standard3",
+            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+            material: "Pressure",
+            environment: "Liquid",
+        },
+        {
+            name: "Yüksek Performans Sensör J",
+            type: "Radar Seviye Sensörü",
+            image: "/images/5.png",
+            measurementRange: "0 ... 150 m",
+            description: "Uzun mesafe seviye ölçümleri için yüksek performanslı sensör.",
+            price: 5000,
+            sensor: "Sensor2",
+            connectionType: "Type2",
+            properties: "Property1",
+            electronics: "Standard2",
+            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+            material: "MassFlow",
+            environment: "Gas",
+        },
+        {
+            name: "Akıllı Basınç Sensörü K",
+            type: "Basınç Sensörü",
+            image: "/images/1.png",
+            measurementRange: "0 ... 200 bar",
+            description: "Akıllı özelliklerle donatılmış basınç sensörü.",
+            price: 2200,
+            sensor: "Sensor3",
+            connectionType: "Type1",
+            properties: "Property2",
+            electronics: "Standard1",
+            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+            material: "SeparatorLayer",
+            environment: "Liquid",
+
+        },
+        {
+            name: "Seviye Sensörü L",
+            type: "Seviye Sensörü",
+            image: "/images/2.png",
+            measurementRange: "0 ... 20 m",
+            description: "Hassas seviye ölçümleri için yüksek doğruluklu sensör.",
+            price: 2700,
+            sensor: "Sensor1",
+            connectionType: "Type2",
+            properties: "Property3",
+            electronics: "Standard3",
+            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+            material: "Level",
+            environment: "Gas",
         }
     ]
 
@@ -216,19 +259,21 @@ const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
             const propertiesFilter = filters.find(f => f.filter === FilterTypes.Properties);
             const electronicsFilter = filters.find(f => f.filter === FilterTypes.Electronics);
 
+
             if (sensorFilter && sensorFilter.value && product.sensor !== sensorFilter.value) return false;
             if (connectionFilter && connectionFilter.value && product.connectionType !== connectionFilter.value) return false;
             if (propertiesFilter && propertiesFilter.value && product.properties !== propertiesFilter.value) return false;
             if (electronicsFilter && electronicsFilter.value && product.electronics !== electronicsFilter.value) return false;
 
+
             return true;
-        });
+        }) as ProductType[];
     }, [filters]);
     return (
         <Box className={styles.chooseProduct}>
             {onBack && (
                 <Box className={styles.chooseProduct__navigation}>
-                    <IconButton 
+                    <IconButton
                         onClick={onBack}
                         className={styles.chooseProduct__navigationBtn}
                         size="large"
@@ -239,12 +284,34 @@ const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
             )}
             <Box className={styles.chooseProduct__filtersContainer}>
                 <Box className={styles.chooseProduct__filtersHeader}>
-                    Filtreler
-                    {filters.length > 0 && (
-                        <Box component="span" className={styles.chooseProduct__filterCount}>
-                            ({filteredProducts.length} ürün)
-                        </Box>
-                    )}
+                    <Box>
+                        {t('filters')}
+                        {filters.length > 0 && (
+                            <Box component="span" className={styles.chooseProduct__filterCount}>
+                                {' '}
+                                ({filters.length} {t('selected')})
+                            </Box>
+                        )}
+                    </Box>
+                    <Box className={styles.chooseProduct__selectedFilters}>
+                        <Typography fontSize='1rem' fontWeight="bold" >
+                            {t('material')} :
+                        </Typography>
+                        <Typography variant="subtitle1" component="span" fontStyle="italic" >
+                            {t(`${material?.toLowerCase()}`)}
+                        </Typography>
+                    </Box>
+                    <Box className={styles.chooseProduct__selectedFilters}>
+                        <Typography fontSize='1rem' fontWeight="bold" >
+                            {t('environment')} :
+                        </Typography>
+                        <Typography variant="subtitle1" component="span" fontStyle="italic" >
+                            {t(`${environment?.toLowerCase()}`)}
+                        </Typography>
+                    </Box>
+                    <Link variant="body2" component="span" className={styles.chooseProduct__clearFilter} onClick={() => setFilters([])}>
+                        {t('clear')}
+                    </Link>
                 </Box>
                 <Box className={styles.chooseProduct__filters}>
                     {renderSelectMenu(FilterTypes.Sensors, ['Sensor1', 'Sensor2', 'Sensor3'])}
@@ -254,7 +321,7 @@ const ChooseProduct = ({ onItemSelected, onBack }: ChooseProductProps) => {
                 </Box>
             </Box>
 
-            <ProductList products={filteredProducts} />
+            <ProductList products={filteredProducts.filter(item => item.material === material && item.environment === environment)} />
         </Box>
     )
 }

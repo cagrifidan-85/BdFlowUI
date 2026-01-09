@@ -8,12 +8,13 @@ import styles from "./style.module.scss";
 import {  useState } from "react";
 import CalculateProduct from "./calculateProduct";
 import React, {useEffect}from "react";
+import { EnvironmentType, MaterialType } from "@constants/index";
 
 
 
 export const Body = () => {
-  const [selectedMaterial, setSelectedMaterial] = useState<string>("")
-  const [selectedEnvironment, setSelectedEnvironment] = useState<string>("")
+  const [selectedMaterial, setSelectedMaterial] = useState<MaterialType | undefined>()
+  const [selectedEnvironment, setSelectedEnvironment] = useState<EnvironmentType | undefined>()
   const [selectedProduct, setSelectedProduct] = useState<string>("")
   const [scrollPosition,setScrollPosition]= useState(500)
   const [showSelection, setShowSelection] = useState(false)
@@ -43,8 +44,7 @@ export const Body = () => {
     }
   }, [scrollPosition]);
 
-  console.log('selectedMaterial',selectedMaterial)
-  console.log('selectedEnvironment',selectedEnvironment)
+ 
   return (
     <Box className={styles.body} >
    
@@ -90,7 +90,7 @@ export const Body = () => {
               </Box>
             </Box>
 
-            <Box className={styles.body__contentCard}>
+            <Box className={styles.body__contentCard} onClick={() =>  setShowSelection(false)}>
               <Box className={styles.body__contentCardIcon}>⚡</Box>
               <Box className={styles.body__contentCardTitle}>Hızlı Sonuç</Box>
               <Box className={styles.body__contentCardText}>
@@ -98,7 +98,7 @@ export const Body = () => {
               </Box>
             </Box>
 
-            <Box className={styles.body__contentCard}>
+            <Box className={styles.body__contentCard} onClick={() =>  setShowSelection(false)}>
               <Box className={styles.body__contentCardIcon}>🔧</Box>
               <Box className={styles.body__contentCardTitle}>Teknik Destek</Box>
               <Box className={styles.body__contentCardText}>
@@ -106,7 +106,7 @@ export const Body = () => {
               </Box>
             </Box>
 
-            <Box className={styles.body__contentCard}>
+            <Box className={styles.body__contentCard} onClick={() => setShowSelection(false)}>
               <Box className={styles.body__contentCardIcon}>✓</Box>
               <Box className={styles.body__contentCardTitle}>Kalite Garantisi</Box>
               <Box className={styles.body__contentCardText}>
@@ -118,7 +118,7 @@ export const Body = () => {
       </Box>
 
       <Box data-sensor-selection>
-        <CalculateProduct onSelectMaterial={setSelectedMaterial} onSelectEnvironment={setSelectedEnvironment} onSelectProduct={setSelectedProduct} isSelectionActive={showSelection} onSelectionActive={setShowSelection}/>
+        <CalculateProduct onSelectMaterial={setSelectedMaterial} onSelectEnvironment={setSelectedEnvironment} onSelectProduct={setSelectedProduct} isSelectionActive={showSelection} onSelectionActive={setShowSelection} material={selectedMaterial} environment={selectedEnvironment} />
       </Box>
 
     </Box>
