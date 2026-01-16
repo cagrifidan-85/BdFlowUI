@@ -5,31 +5,24 @@ import Footer from "./footer";
 import { Box, CircularProgress } from "@mui/material";
 import styles from "./style.module.scss";
 
-// import { useGetTodosQuery } from "../../apis/todos"
+
 
 
 
 export const Main = () => {
   const lang = localStorage.getItem("currentLang");
 
-  useEffect( ()=>{
+  useEffect(() => {
     localStorage.setItem("currentLang", 'tr');
+  }, [])
 
-    const response =  fetch('/todos').then((res) => res.json()).then((res)=> console.log('dadas',res.data))
 
-  },[])
-  
- 
   const handleChangeLang = (lang: string | null) => {
     if (lang) {
       localStorage.setItem("currentLang", lang);
       window.location.reload();
     }
   };
-
-//  const {data, isLoading} =useGetTodosQuery()
-
-
 
 
   return (

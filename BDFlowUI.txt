@@ -1,0 +1,23 @@
+BDFlowUI
+
+MongoDb:
+
+user name :   cagrifdn85_db_user
+Password   :  C7syOqt36feSHVOM  /  MO5n6Tlo4hudDbn1
+
+connection string  :mongodb+srv://cagrifdn85_db_user:<db_password>@cluster0.o7zwszu.mongodb.net/?appName=Cluster0
+
+
+Cloudinary
+
+CLOUDINARY_URL=cloudinary://867239848325214:AyqWuQIsBACCknF-Oqagl6mGi-M@dbosktel4
+
+cloud name : dbosktel4
+api key : 867239848325214
+api secret : AyqWuQIsBACCknF-Oqagl6mGi-M
+
+
+DB Yi güncelle
+
+modeli update ettikten sonra 
+node scripts/seedProducts.js

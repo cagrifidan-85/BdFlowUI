@@ -22,7 +22,7 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
 
     const [isOpenDetailModal, setIsOpenDetailModal] = useState<boolean>(false);
     const sortedProducts = [...products].sort((a, b) => {
-        if (sortKey === 'price') return a.price - b.price;
+        if (sortKey === 'price') return a.price.amount - b.price.amount;
         if (sortKey === 'name') return a.name.localeCompare(b.name);
         if (sortKey === 'bestSeller') return (b.bestSeller ? 1 : 0) - (a.bestSeller ? 1 : 0);
         return 0;

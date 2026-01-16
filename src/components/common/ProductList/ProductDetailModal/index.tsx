@@ -23,10 +23,10 @@ const ProductDetailModal = ({ open, product, onClose }: ProductDetailModalProps)
 
                 <Box className={styles.productDetailModal__info}>
                     <img src={product?.image} alt={product?.name} className={styles.productDetailModal__image} />
-                    <p><strong>{t('type')}:</strong> {product?.type}</p>
-                    <p><strong>{t('measurement.range')}:</strong> {product?.measurementRange}</p>
+                    <p><strong>{t('type')}:</strong> {product?.category}</p>
+                    <p><strong>{t('admin.products.measurementRange')}:</strong> {product?.measurementRange}</p>
                     <p><strong>{t('description')}:</strong> {product?.description}  </p>
-                    <p><strong>{t('price')}</strong> {product?.price.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</p>
+                    <p><strong>{t('price')}</strong> {product?.price.amount.toLocaleString('tr-TR', { style: 'currency', currency: product?.price.currency })}</p>
                 </Box>
                 <Box className={styles.productDetailModal__contentActions} >
                     <Box className={styles.productDetailModal__contentActionsCatalog}  onClick={() => {

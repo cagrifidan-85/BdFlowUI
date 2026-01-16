@@ -1,0 +1,269 @@
+require('dotenv').config();
+const mongoose = require('mongoose');
+const { Product } = require('../models/Product');
+const connectDB = require('../config/db');
+
+// Mevcut ürünleriniz (Products component'inden)
+const seedProducts = [
+    {
+        productNo: "1",
+        name: "Basınç Sensörü A",
+        category: "Pressure Sensors",
+        image: "/images/1.png",
+        measurementRange: "-1 ... 60 bar",
+        description: "Kompakt, genel amaçlı basınç sensörü.",
+        price: {
+            amount: 1200,
+            currency: "TL"
+        },
+        sensor: "Sensor1",
+        connectionType: "Type1",
+        properties: "Property1",
+        electronics: "Standard1",
+        catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+        material: "Level",
+        environment: "Gas",
+        stock: 15
+    },
+    {
+        productNo: "2",
+        name: "Seviye Sensörü B",
+        category: "Level Sensors",
+        image: "/images/2.png",
+        measurementRange: "0 ... 15 m",
+        description: "Sıvı ve katıların temassız seviye ölçümü için radar sensörü.",
+        price: {
+            amount: 2500,
+            currency: "TL"
+        },
+        sensor: "Sensor2",
+        connectionType: "Type2",
+        properties: "Property2",
+        electronics: "Standard2",
+        catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+        material: "Limit",
+        environment: "Liquid",
+        stock: 8
+    },
+    {
+        productNo: "3",
+        name: "Seviye Anahtarı C",
+        category: "Level Sensors",
+        image: "/images/3.png",
+        measurementRange: "Limit seviye",
+        description: "Sıvı ve katıların limit seviye tespiti için kapasitif anahtar.",
+        price: {
+            amount: 900,
+            currency: "TL"
+        },
+        sensor: "Sensor1",
+        connectionType: "Type3",
+        properties: "Property3",
+        electronics: "Standard1",
+        catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+        material: "Pressure",
+        environment: "Gas",
+        stock: 12
+    },
+    {
+        productNo: "4",
+        name: "Mikrodalga Sensör D",
+        category: "Microwave Level Sensors",
+        image: "/images/4.png",
+        measurementRange: "0 ... 75 m",
+        description: "Sıvı ve dökme katıların sürekli seviye ölçümü için.",
+        price: {
+            amount: 3200,
+            currency: "TL"
+        },
+        sensor: "Sensor3",
+        connectionType: "Type1",
+        properties: "Property1",
+        electronics: "Standard3",
+        catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+        material: "Intensity",
+        environment: "Liquid",
+        stock: 10
+    },
+    {
+        productNo: "5",
+        name: "Radar Sensör E",
+        category: "Radar Level Sensors",
+        image: "/images/5.png",
+        measurementRange: "0 ... 75 m",
+        description: "Sıvı ve katıların hassas seviye ölçümü için kılavuzlu radar sensörü.",
+        price: {
+            amount: 4100,
+            currency: "TL"
+        },
+        sensor: "Sensor2",
+        connectionType: "Type2",
+        properties: "Property2",
+        electronics: "Standard2",
+        catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+        material: "MassFlow",
+        environment: "Gas",
+        stock: 7
+    },
+    {
+        productNo: "6",
+        name: "Basınç Sensörü F",
+        category: "Pressure Sensors",
+        image: "/images/1.png",
+        measurementRange: "0 ... 100 bar",
+        description: "Yüksek basınç ölçümleri için endüstriyel sensör.",
+        price: {
+            amount: 1800,
+            currency: "TL"
+        },
+        sensor: "Sensor1",
+        connectionType: "Type2",
+        properties: "Property3",
+        electronics: "Standard3",
+        catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+        material: "SeparatorLayer",
+        environment: "Liquid",
+        stock: 5
+    },
+    {
+        productNo: "7",
+        name: "Smart Level Sensor G",
+        category: "Level Sensors",
+        image: "/images/2.png",
+        measurementRange: "0 ... 30 m",
+        description: "Remote monitoring capability with IoT feature.",
+        price: {
+            amount: 3500,
+            currency: "TL"
+        },
+        sensor: "Sensor3",
+        connectionType: "Type3",
+        properties: "Property1",
+        electronics: "Standard2",
+        catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+        material: "Level",
+        environment: "Liquid",
+        stock: 6
+    },
+    {
+        productNo: "8",
+        name: "Compact Sensor H",
+        category: "Level Sensors",
+        image: "/images/3.png",
+        measurementRange: "Limit level",
+        description: "Compact design for small spaces.",
+        price: {
+            amount: 750,
+            currency: "TL"
+        },
+        sensor: "Sensor2",
+        connectionType: "Type1",
+        properties: "Property2",
+        electronics: "Standard1",
+        catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+        material: "Limit",
+        environment: "Gas",
+        stock: 20
+    },
+    {
+        productNo: "9",
+        name: "Industrial Sensor I",
+        category: "Microwave Level Sensors",
+        image: "/images/4.png",
+        measurementRange: "0 ... 100 m",
+        description: "Durable for harsh industrial environments.",
+        price: {
+            amount: 4000,
+            currency: "TL"
+        },
+        sensor: "Sensor1",
+        connectionType: "Type3",
+        properties: "Property3",
+        electronics: "Standard3",
+        catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+        material: "Pressure",
+        environment: "Liquid",
+        stock: 9
+    },
+    {
+        productNo: "10",
+        name: "Yüksek Performans Sensör J",
+        category: "Level Sensors",
+        image: "/images/5.png",
+        measurementRange: "0 ... 150 m",
+        description: "Uzun mesafe seviye ölçümleri için yüksek performanslı sensör.",
+        price: {
+            amount: 5000,
+            currency: "TL"
+        },
+        sensor: "Sensor2",
+        connectionType: "Type2",
+        properties: "Property1",
+        electronics: "Standard2",
+        catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+        material: "MassFlow",
+        environment: "Gas",
+        stock: 7
+    },
+    {
+        productNo: "11",
+        name: "Akıllı Basınç Sensörü K",
+        category: "Pressure Sensors",
+        image: "/images/1.png",
+        measurementRange: "0 ... 200 bar",
+        description: "Akıllı özelliklerle donatılmış basınç sensörü.",
+        price: {
+            amount: 2200,
+            currency: "TL"
+        },
+        sensor: "Sensor3",
+        connectionType: "Type1",
+        properties: "Property2",
+        electronics: "Standard1",
+        catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+        material: "SeparatorLayer",
+        environment: "Liquid",
+        stock: 4
+    },
+    {
+        productNo: "12",
+        name: "Seviye Sensörü L",
+        category: "Level Sensors",
+        image: "/images/2.png",
+        measurementRange: "0 ... 20 m",
+        description: "Hassas seviye ölçümleri için yüksek doğruluklu sensör.",
+        price: {
+            amount: 2700,
+            currency: "TL"
+        },
+        sensor: "Sensor1",
+        connectionType: "Type2",
+        properties: "Property3",
+        electronics: "Standard3",
+        catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
+        material: "Level",
+        environment: "Gas",
+        stock: 3
+    }
+];
+
+const seedDB = async () => {
+    try {
+        await connectDB();
+        
+        // Önce mevcut verileri temizle
+        await Product.deleteMany({});
+        console.log('Existing products cleared');
+        
+        // Yeni verileri ekle
+        await Product.insertMany(seedProducts);
+        console.log(`${seedProducts.length} products added successfully!`);
+        
+        process.exit(0);
+    } catch (error) {
+        console.error('Error seeding database:', error);
+        process.exit(1);
+    }
+};
+
+seedDB();

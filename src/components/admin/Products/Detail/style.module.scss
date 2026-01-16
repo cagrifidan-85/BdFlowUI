@@ -1,0 +1,92 @@
+.productDetail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 1.5rem;
+    width: 70%;
+   height: 60vh;
+    overflow-y: auto;
+    background-color: aliceblue;
+    border-radius: 8px;
+
+
+    &__header {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        text-align: center;
+        border-bottom: 1px solid #ccc;
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: row;
+        gap: 2rem;
+        width: 100%;
+
+        &Fields {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+            width: 100%;
+
+            &Item {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 0.5rem;
+                width: 100%;
+            }
+
+            &ItemLarge {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+                width: 100%;
+            }
+        }
+
+        &Actions {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            gap: 30px;
+            align-items: center;
+            flex-wrap: wrap;
+
+            &Catalog {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                color: #1976d2;
+                padding: 10px;
+                border-radius: 4px;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    text-decoration: underline;
+                    background-color: rgba(25, 118, 210, 0.1);
+                }
+            }
+
+            img {
+                max-width: 300px;
+                max-height: 300px;
+                width: auto;
+                height: auto;
+                object-fit: contain;
+                border-radius: 4px;
+                border: 1px solid #ddd;
+            }
+
+        }
+    }
+
+}

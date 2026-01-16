@@ -30,10 +30,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
       />
       <CardContent className={styles.product__content}>
         <Typography variant="h6" className={styles.product__contentName}>{product.name}</Typography>
-        <Typography variant="subtitle2" className={styles.product__contentType}>{product.type}</Typography>
+        <Typography variant="subtitle2" className={styles.product__contentType}>{product.category}</Typography>
         <Typography variant="body2" className={styles.product__contentRange}>Ölçüm Aralığı: {product.measurementRange}</Typography>
         <Typography variant="body2" className={styles.product__contentDescription}>{product.description}</Typography>
-        <Typography variant="h6" color="primary" className={styles.product__contentPrice}>{product.price.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</Typography>
+        <Typography variant="h6" color="primary" className={styles.product__contentPrice}>{product.price.amount.toLocaleString('tr-TR', { style: 'currency', currency: product.price.currency })}</Typography>
         <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
           <Button variant="outlined" color="info" onClick={() => onDetails && onDetails(product)}>{t('product.details')}</Button>
           <Button variant="contained" color="success" onClick={onAddToCart}>{t('product.addToCart')}</Button>

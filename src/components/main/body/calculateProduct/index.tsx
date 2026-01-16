@@ -1,17 +1,15 @@
-import { Box, Typography, Collapse } from "@mui/material";
+import { Box, Collapse } from "@mui/material";
 import React, { useState } from "react";
 import Steppers from "./stepper";
 import styles from "./style.module.scss";
-import { useTranslation } from "react-i18next";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ChooseMaterial from "./chooseMaterial";
 import ChooseEnvironment from "./chooseEnvironment";
 import ChooseProduct from "./chooseProduct";
-import { EnvironmentType, MaterialType } from "@constants/index";
+import { EnvironmentType, MaterialType, ProductFiltersModel, ProductType } from "@constants/index";
 
 interface CalculateProductProps {
+  products:ProductType[]
+  filters:ProductFiltersModel
   onSelectMaterial: (value: MaterialType) => void;
   onSelectEnvironment: (value: EnvironmentType) => void;
   onSelectProduct: (value: string) => void;
@@ -23,6 +21,8 @@ interface CalculateProductProps {
 
 
 const CalculateProduct: React.FC<CalculateProductProps> = ({
+  products,
+  filters,
   onSelectMaterial,
   onSelectEnvironment,
   onSelectProduct,
@@ -32,7 +32,6 @@ const CalculateProduct: React.FC<CalculateProductProps> = ({
   environment
 
 }) => {
-  const { t } = useTranslation();
 
   const [currentStep, setCurrentStep] = useState<number>(0);
 
@@ -48,19 +47,21 @@ const CalculateProduct: React.FC<CalculateProductProps> = ({
     }
   };
 
+
+  
   return (
 
     <Box className={styles.calculateProduct} >
       <Collapse className={styles.calculateProduct__collapse} in={isSelectionActive}  >
         <Steppers currentStep={currentStep}  onStepChanged={(active) => setCurrentStep(active)} />
         <Collapse in={currentStep === 0} >
-          <ChooseMaterial onItemSelected={(value) => onSelectMaterial(value)} onNext={handleNext} />
+          <ChooseMaterial data={filters?.materials} onItemSelected={(value) => onSelectMaterial(value)} onNext={handleNext} />
         </Collapse>
         <Collapse in={currentStep === 1}>
-          <ChooseEnvironment onItemSelected={(value) => onSelectEnvironment(value)} onNext={handleNext} onBack={handleBack} />
+          <ChooseEnvironment data={filters?.environments} onItemSelected={(value) => onSelectEnvironment(value)} onNext={handleNext} onBack={handleBack} />
         </Collapse>
         <Collapse in={currentStep === 2}>
-          <ChooseProduct onItemSelected={(value: string) => onSelectProduct(value)} onBack={handleBack}  material={material} environment={environment} />
+          <ChooseProduct onItemSelected={(value: string) => onSelectProduct(value)} onBack={handleBack} products={products} material={material} environment={environment} />
         </Collapse>
       </Collapse>
     </Box>

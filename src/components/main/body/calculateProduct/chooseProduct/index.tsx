@@ -1,8 +1,8 @@
-import { Box, Select, IconButton, Typography, Link, FormControl, MenuItem } from '@mui/material';
+import { Box, Select, IconButton, Typography, Link, FormControl, MenuItem, Alert, AlertTitle, Snackbar, CircularProgress } from '@mui/material';
 import React from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import styles from './style.module.scss';
-import { EnvironmentType, FilterTypes, MaterialType, ProductType } from '@constants/index';
+import { CategoriesType, ElectronicsTypes, EnvironmentType, FilterTypes, MaterialType, ProductType, PropertyTypes, SensorTypes } from '@constants/index';
 import ProductList from '@components/common/ProductList';
 import { useTranslation } from 'react-i18next';
 
@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 
 interface ChooseProductProps {
+    products?: ProductType[];
     onItemSelected?: (value: string) => void;
     onBack?: () => void;
     material?: MaterialType;
@@ -18,10 +19,11 @@ interface ChooseProductProps {
 
 
 
-const ChooseProduct = ({ onItemSelected, onBack, material, environment }: ChooseProductProps) => {
+const ChooseProduct = ({ products, onItemSelected, onBack, material, environment }: ChooseProductProps) => {
     const { t } = useTranslation();
     const [filters, setFilters] = React.useState<{ filter: FilterTypes, value: string }[]>([])
-
+ 
+    const [showError, setShowError] = React.useState(false);
     const handleChange = (filterType: FilterTypes, value: string) => {
         setFilters(prevFilters => {
             const filtered = prevFilters.filter(f => f.filter !== filterType);
@@ -36,10 +38,10 @@ const ChooseProduct = ({ onItemSelected, onBack, material, environment }: Choose
             [FilterTypes.Sensors]: 'Sensör Tipi',
             [FilterTypes.ConnectionType]: 'Bağlantı Tipi',
             [FilterTypes.Properties]: 'Özellikler',
-            [FilterTypes.Others]: 'Diğer',
             [FilterTypes.Electronics]: 'Elektronik',
-
-
+            [FilterTypes.Materials]: 'Malzeme',
+            [FilterTypes.Environments]: 'Ortam',
+            [FilterTypes.Categories]: 'Kategori',
         };
 
         return (
@@ -67,193 +69,11 @@ const ChooseProduct = ({ onItemSelected, onBack, material, environment }: Choose
         )
     }
 
-    const allProducts = [
-        {
-            name: "Basınç Sensörü A",
-            type: "Basınç Sensörü",
-            image: "/images/1.png",
-            measurementRange: "-1 ... 60 bar",
-            description: "Kompakt, genel amaçlı basınç sensörü.",
-            price: 1200,
-            sensor: "Sensor1",
-            connectionType: "Type1",
-            properties: "Property1",
-            electronics: "Standard1",
-            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
-            material: "Level",
-            environment: "Gas"
-        },
-        {
-            name: "Seviye Sensörü B",
-            type: "Seviye Sensörü",
-            image: "/images/2.png",
-            measurementRange: "0 ... 15 m",
-            description: "Sıvı ve katıların temassız seviye ölçümü için radar sensörü.",
-            price: 2500,
-            sensor: "Sensor2",
-            connectionType: "Type2",
-            properties: "Property2",
-            electronics: "Standard2",
-            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
-            material: "Limit",
-            environment: "Liquid"
-        },
-        {
-            name: "Seviye Anahtarı C",
-            type: "Seviye Anahtarı",
-            image: "/images/3.png",
-            measurementRange: "Limit seviye",
-            description: "Sıvı ve katıların limit seviye tespiti için kapasitif anahtar.",
-            price: 900,
-            sensor: "Sensor1",
-            connectionType: "Type3",
-            properties: "Property3",
-            electronics: "Standard1",
-            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
-            material: "Pressure",
-            environment: "Gas"
-        },
-        {
-            name: "Mikrodalga Sensör D",
-            type: "Mikrodalga Seviye Sensörü",
-            image: "/images/4.png",
-            measurementRange: "0 ... 75 m",
-            description: "Sıvı ve dökme katıların sürekli seviye ölçümü için.",
-            price: 3200,
-            sensor: "Sensor3",
-            connectionType: "Type1",
-            properties: "Property1",
-            electronics: "Standard3",
-            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
-            material: "Intensity",
-            environment: "Liquid"
-        },
-        {
-            name: "Radar Sensör E",
-            type: "Radar Seviye Sensörü",
-            image: "/images/5.png",
-            measurementRange: "0 ... 75 m",
-            description: "Sıvı ve katıların hassas seviye ölçümü için kılavuzlu radar sensörü.",
-            price: 4100,
-            sensor: "Sensor2",
-            connectionType: "Type2",
-            properties: "Property2",
-            electronics: "Standard2",
-            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
-            material: "MassFlow",
-            environment: "Gas"
-        },
-        {
-            name: "Basınç Sensörü F",
-            type: "Basınç Sensörü",
-            image: "/images/1.png",
-            measurementRange: "0 ... 100 bar",
-            description: "Yüksek basınç ölçümleri için endüstriyel sensör.",
-            price: 1800,
-            sensor: "Sensor1",
-            connectionType: "Type2",
-            properties: "Property3",
-            electronics: "Standard3",
-            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
-            material: "SeparatorLayer",
-            environment: "Liquid"
-        },
-        {
-            name: "Akıllı Seviye Sensörü G",
-            type: "Seviye Sensörü",
-            image: "/images/2.png",
-            measurementRange: "0 ... 30 m",
-            description: "IoT özelliği ile uzaktan izleme imkanı.",
-            price: 3500,
-            sensor: "Sensor3",
-            connectionType: "Type3",
-            properties: "Property1",
-            electronics: "Standard2",
-            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
-            material: "Level",
-            environment: "Liquid"
-        },
-        {
-            name: "Kompakt Sensör H",
-            type: "Seviye Anahtarı",
-            image: "/images/3.png",
-            measurementRange: "Limit seviye",
-            description: "Küçük alanlar için kompakt tasarım.",
-            price: 750,
-            sensor: "Sensor2",
-            connectionType: "Type1",
-            properties: "Property2",
-            electronics: "Standard1",
-            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
-            material: "Limit",
-            environment: "Gas"
-        },
-        {
-            name: "Endüstriyel Sensör I",
-            type: "Mikrodalga Seviye Sensörü",
-            image: "/images/4.png",
-            measurementRange: "0 ... 100 m",
-            description: "Zorlu endüstriyel ortamlara dayanıklı.",
-            price: 4000,
-            sensor: "Sensor1",
-            connectionType: "Type3",
-            properties: "Property3",
-            electronics: "Standard3",
-            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
-            material: "Pressure",
-            environment: "Liquid",
-        },
-        {
-            name: "Yüksek Performans Sensör J",
-            type: "Radar Seviye Sensörü",
-            image: "/images/5.png",
-            measurementRange: "0 ... 150 m",
-            description: "Uzun mesafe seviye ölçümleri için yüksek performanslı sensör.",
-            price: 5000,
-            sensor: "Sensor2",
-            connectionType: "Type2",
-            properties: "Property1",
-            electronics: "Standard2",
-            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
-            material: "MassFlow",
-            environment: "Gas",
-        },
-        {
-            name: "Akıllı Basınç Sensörü K",
-            type: "Basınç Sensörü",
-            image: "/images/1.png",
-            measurementRange: "0 ... 200 bar",
-            description: "Akıllı özelliklerle donatılmış basınç sensörü.",
-            price: 2200,
-            sensor: "Sensor3",
-            connectionType: "Type1",
-            properties: "Property2",
-            electronics: "Standard1",
-            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
-            material: "SeparatorLayer",
-            environment: "Liquid",
 
-        },
-        {
-            name: "Seviye Sensörü L",
-            type: "Seviye Sensörü",
-            image: "/images/2.png",
-            measurementRange: "0 ... 20 m",
-            description: "Hassas seviye ölçümleri için yüksek doğruluklu sensör.",
-            price: 2700,
-            sensor: "Sensor1",
-            connectionType: "Type2",
-            properties: "Property3",
-            electronics: "Standard3",
-            catalogUrl: "https://pdfobject.com/pdf/sample.pdf",
-            material: "Level",
-            environment: "Gas",
-        }
-    ]
 
     // Filtreleme mantığı
     const filteredProducts = React.useMemo(() => {
-        return allProducts.filter(product => {
+        return products && products.filter(product => {
             const sensorFilter = filters.find(f => f.filter === FilterTypes.Sensors);
             const connectionFilter = filters.find(f => f.filter === FilterTypes.ConnectionType);
             const propertiesFilter = filters.find(f => f.filter === FilterTypes.Properties);
@@ -267,8 +87,10 @@ const ChooseProduct = ({ onItemSelected, onBack, material, environment }: Choose
 
 
             return true;
-        }) as ProductType[];
-    }, [filters]);
+        })
+    }, [filters, products]);
+
+    
     return (
         <Box className={styles.chooseProduct}>
             {onBack && (
@@ -314,14 +136,26 @@ const ChooseProduct = ({ onItemSelected, onBack, material, environment }: Choose
                     </Link>
                 </Box>
                 <Box className={styles.chooseProduct__filters}>
-                    {renderSelectMenu(FilterTypes.Sensors, ['Sensor1', 'Sensor2', 'Sensor3'])}
-                    {renderSelectMenu(FilterTypes.ConnectionType, ['Type1', 'Type2', 'Type3'])}
-                    {renderSelectMenu(FilterTypes.Properties, ['Property1', 'Property2', 'Property3'])}
-                    {renderSelectMenu(FilterTypes.Electronics, ['Standard1', 'Standard2', 'Standard3'])}
+                    {renderSelectMenu(FilterTypes.Sensors, [...Object.values(SensorTypes)])}
+                    {renderSelectMenu(FilterTypes.ConnectionType, [...Object.values(CategoriesType)])}
+                    {renderSelectMenu(FilterTypes.Properties, [...Object.values(PropertyTypes)])}
+                    {renderSelectMenu(FilterTypes.Electronics, [...Object.values(ElectronicsTypes)])}
                 </Box>
             </Box>
 
-            <ProductList products={filteredProducts.filter(item => item.material === material && item.environment === environment)} />
+            {filteredProducts && <ProductList products={filteredProducts?.filter(item => item.material === material && item.environment === environment)} />}
+
+            <Snackbar
+                open={showError}
+                autoHideDuration={3000}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                onClose={() => setShowError(false)}
+            >
+                <Alert severity="error" onClose={() => setShowError(false)}>
+                    <AlertTitle>{t('admin.products.create.errorTitle')}</AlertTitle>
+                    {t('admin.products.create.errorMessage')}
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }

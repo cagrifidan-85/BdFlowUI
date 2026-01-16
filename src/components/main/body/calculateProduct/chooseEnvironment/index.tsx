@@ -5,10 +5,11 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import styles from "./style.module.scss";
 import classnames from 'classnames/bind'
-import { EnvironmentType } from "@constants/index";
+import { EnvironmentType, FiterBaseModel } from "@constants/index";
 
 
 interface ChooseEnvironmentProps {
+    data?:FiterBaseModel[]
     onItemSelected: (value: EnvironmentType) => void;
     onNext?: () => void;
     onBack?: () => void;
@@ -16,12 +17,21 @@ interface ChooseEnvironmentProps {
 
 const cx = classnames.bind(styles)
 
-const ChooseEnvironment: React.FC<ChooseEnvironmentProps> = ({ onItemSelected, onNext, onBack }) => {
+
+
+const ChooseEnvironment: React.FC<ChooseEnvironmentProps> = ({data, onItemSelected, onNext, onBack }) => {
     const { t } = useTranslation();
+    const lang = localStorage.getItem("currentLang");
     const [selectedEnvironment,setSelectedEnvironment]= useState<EnvironmentType>()
 
   
-
+const getEnvironmentImage = (code: string) => {
+  try {
+    return require(`../../../../../../src/logos/environments/${code}.png`);
+  } catch (error) {
+    return ''; // Return empty string if image not found
+  }
+}
     const handleItemSelect =(item:EnvironmentType)=>{
 
         setSelectedEnvironment(item)
@@ -31,26 +41,24 @@ const ChooseEnvironment: React.FC<ChooseEnvironmentProps> = ({ onItemSelected, o
     return (
         <Box className={styles.chooseEnvironment}>
             <Box className={styles.chooseEnvironment__container}>
-                {Object.values(EnvironmentType).map((item) => (
+                {data?.map((item) => (
                     <Box
-                        key={item}
+                        key={item.code}
                         className={cx('chooseEnvironment__environments', {
-                            'chooseEnvironment__environments--selected': selectedEnvironment===item,
+                            'chooseEnvironment__environments--selected': selectedEnvironment===item.code,
                           })}
                       
-                        onClick={() => handleItemSelect(item)}
+                        onClick={() => handleItemSelect(item.code as EnvironmentType    )}
                     >
                         <img
-                            key={item}
-                            src={require("../../../../../../src/logos/environments/" +
-                                item.toString() +
-                                ".png")}
+                            key={item.code}
+                            src={getEnvironmentImage(item?.code.toString())}
                             loading="lazy"
                             width={100}
                             height={120}
-                            title={t(item.toLocaleLowerCase().toString())}
+                            title={t(item[`${lang === 'en' ? 'en' : 'tr'}`])}
                         />
-                        <Typography>{t(item.toLocaleLowerCase())}</Typography>
+                        <Typography>{t(item[`${lang === 'en' ? 'en' : 'tr'}`])}</Typography>
                     </Box>
                 ))}
             </Box>

@@ -1,0 +1,33 @@
+.createProduct {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 1.5rem;
+    max-width: 1000px;
+    max-height: 80vh;
+    background-color: aliceblue;
+    border-radius: 8px;
+
+
+    &__title {
+        text-align: center;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #ccc;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        overflow-y: auto;
+
+    }
+
+    &__imageUpload {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+}

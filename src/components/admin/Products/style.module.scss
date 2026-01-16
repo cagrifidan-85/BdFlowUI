@@ -1,0 +1,41 @@
+.products {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 5px;
+
+    }
+    &__table {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+
+        &Headers {
+            background-color: #d9d9d9;
+        }
+
+        &Body {
+            &Row {
+                &:nth-child(even) {
+                    background-color: #fafafa;
+                }
+
+                &Actions {
+                    display: flex;
+                }
+            }
+        }
+
+    }
+    &__footer {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+    }
+}

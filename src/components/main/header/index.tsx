@@ -4,6 +4,7 @@ import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import styles from "../header/style.module.scss";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 interface HeaderProps {
   currentLang: string | null;
@@ -34,6 +35,7 @@ export const Header: React.FC<HeaderProps> = ({
         />
         E-MAIL
       </Box>
+      <Box> <Link style={{ color: "white" }} to="/admin">{t('admin.panel.header')}</Link></Box>
       <Box onClick={() => onChangeLang(currentLang === "tr" ? "en" : "tr")}>
         {t("header.lang")}
       </Box>
