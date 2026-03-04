@@ -1,9 +1,14 @@
 .header {
   background-color: rgb(209 63 66);
   height: 5%;
-  color: antiquewhite;
+  color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0px 20px;
+
+  &__controls {
+    display: flex;
+    gap: 20px;
+  }
 }

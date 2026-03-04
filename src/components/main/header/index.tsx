@@ -33,11 +33,12 @@ export const Header: React.FC<HeaderProps> = ({
           variant="fullWidth"
           style={{ borderColor: "white" }}
         />
-        E-MAIL
+       {t('email')}
       </Box>
-      <Box> <Link style={{ color: "white" }} to="/admin">{t('admin.panel.header')}</Link></Box>
+      <Box className={styles.header__controls}> <Link style={{ color: "white" }} to="/admin">{t('admin.panel.header')}</Link>
       <Box onClick={() => onChangeLang(currentLang === "tr" ? "en" : "tr")}>
         {t("header.lang")}
+      </Box>
       </Box>
     </Box>
   );

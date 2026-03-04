@@ -5,12 +5,12 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import styles from "./style.module.scss";
 import classnames from 'classnames/bind'
-import { EnvironmentType, FiterBaseModel } from "@constants/index";
+import { FilterBaseModel } from "@constants/index";
 
 
 interface ChooseEnvironmentProps {
-    data?:FiterBaseModel[]
-    onItemSelected: (value: EnvironmentType) => void;
+    data?:FilterBaseModel[]
+    onItemSelected: (value: string) => void;
     onNext?: () => void;
     onBack?: () => void;
 }
@@ -22,7 +22,7 @@ const cx = classnames.bind(styles)
 const ChooseEnvironment: React.FC<ChooseEnvironmentProps> = ({data, onItemSelected, onNext, onBack }) => {
     const { t } = useTranslation();
     const lang = localStorage.getItem("currentLang");
-    const [selectedEnvironment,setSelectedEnvironment]= useState<EnvironmentType>()
+    const [selectedEnvironment,setSelectedEnvironment]= useState<string>()
 
   
 const getEnvironmentImage = (code: string) => {
@@ -32,11 +32,11 @@ const getEnvironmentImage = (code: string) => {
     return ''; // Return empty string if image not found
   }
 }
-    const handleItemSelect =(item:EnvironmentType)=>{
+    const handleItemSelect =(item:FilterBaseModel)=>{
 
-        setSelectedEnvironment(item)
+        setSelectedEnvironment(item.code)
     
-        onItemSelected(item)
+        onItemSelected(item.code)
       }
     return (
         <Box className={styles.chooseEnvironment}>
@@ -48,7 +48,7 @@ const getEnvironmentImage = (code: string) => {
                             'chooseEnvironment__environments--selected': selectedEnvironment===item.code,
                           })}
                       
-                        onClick={() => handleItemSelect(item.code as EnvironmentType    )}
+                        onClick={() => handleItemSelect(item)}
                     >
                         <img
                             key={item.code}

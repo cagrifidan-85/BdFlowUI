@@ -60,8 +60,8 @@ Server will run on `http://localhost:5000`
 - `DELETE /api/products/:id` - Delete product
 
 ### Upload
-- `POST /api/upload` - Upload image to Cloudinary
-- `DELETE /api/upload/:publicId` - Delete image from Cloudinary
+- `POST /api/images/upload` - Upload image to Cloudinary
+- `DELETE /api/images/:publicId` - Delete image from Cloudinary
 
 ### Health Check
 - `GET /api/health` - Server health status

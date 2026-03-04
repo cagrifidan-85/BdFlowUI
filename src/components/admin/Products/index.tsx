@@ -3,7 +3,7 @@ import styles from "./style.module.scss"
 import { Button, Pagination, Table, TableBody, TableCell, TableFooter, TableHead, TableRow, CircularProgress, Alert } from "@mui/material"
 
 import { useTranslation } from "react-i18next"
-import { ProductType, CategoriesType, MaterialType, EnvironmentType } from "@constants/index"
+import { FilterBaseModel, ProductType } from "@constants/index"
 import CurrencyInput from "react-currency-input-field"
 import EditNoteIcon from '@mui/icons-material/EditNote'
 import PreviewOutlinedIcon from '@mui/icons-material/PreviewOutlined'
@@ -18,6 +18,7 @@ import CreateProduct from "./Create"
 const Products = () => {
 
     const { t } = useTranslation()
+    const lang = localStorage.getItem("currentLang")
     const { data: apiProducts, isLoading, isError } = useGetAllProductsQuery()
     const { data: filters, isError: isFiltersError, isLoading: isFiltersLoading } = useGetFiltersQuery()
     const [products, setProducts] = useState<ProductType[]>([])
@@ -85,7 +86,7 @@ const Products = () => {
                         <TableRow key={index} className={styles.products__tableBodyRow}>
                             <TableCell>{product.productNo}</TableCell>
                             <TableCell>{product.name}</TableCell>
-                            <TableCell>{product.category}</TableCell>
+                            <TableCell>{product.category ? filters?.categories?.filter((category: FilterBaseModel) => category.code === product.category)[0]?.[lang as 'tr' | 'en'] ?? '' : ''}</TableCell>
                             <TableCell><CurrencyInput value={product.price.amount} disabled suffix={product.price.currency} /></TableCell>
                             <TableCell>{product.stock}</TableCell>
                             <TableCell className={styles.products__tableBodyRowActions}>
@@ -105,7 +106,7 @@ const Products = () => {
 
             </Box>
 
-            {detailModalProps.product && <ProductDetail product={detailModalProps.product} open={detailModalProps.open && Boolean(detailModalProps.product)} onClose={() => setDetailModalProps({ open: false, product: null })} />}
+            {detailModalProps.product && <ProductDetail filters={filters} product={detailModalProps?.product} open={detailModalProps.open && Boolean(detailModalProps.product)} onClose={() => setDetailModalProps({ open: false, product: null })} />}
             {editModalProps.product && <ProductEdit filters={filters} product={editModalProps.product} open={editModalProps.open && Boolean(editModalProps.product)} onClose={() => setEditModalProps({ open: false, product: null })} />}
             {<CreateProduct filters={filters} open={createModalProps.open} onClose={() => setCreateModalProps({ open: false })} />}
         </Box>

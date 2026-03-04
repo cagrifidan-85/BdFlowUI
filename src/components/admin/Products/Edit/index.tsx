@@ -10,8 +10,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import { useState } from "react";
 
 interface ProductEditProps {
-    filters: ProductFiltersModel
-    product: ProductType
+    filters?: ProductFiltersModel
+    product?: ProductType
     open: boolean
     onClose: () => void
 }
@@ -20,7 +20,7 @@ const ProductEdit = ({ filters, product, open, onClose }: ProductEditProps) => {
     const { t } = useTranslation()
     const lang = localStorage.getItem("currentLang");
     const [updateProduct, { isLoading }] = useUpdateProductMutation();
-    const [uploadImage] = useUploadImageMutation();
+    const [uploadImage,{isLoading: isUploading}] = useUploadImageMutation();
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [catalogFile, setCatalogFile] = useState<File | null>(null);
     const [showSuccess, setShowSuccess] = useState(false);
@@ -29,6 +29,7 @@ const ProductEdit = ({ filters, product, open, onClose }: ProductEditProps) => {
     const {
         handleSubmit,
         control,
+        watch,
         formState: { errors },
         reset
     } = useForm<ProductType>({
@@ -52,7 +53,7 @@ const ProductEdit = ({ filters, product, open, onClose }: ProductEditProps) => {
 
             const payload: ProductType = {
                 ...data,
-                id: product.id,
+                id: product?.id,
                 price: { amount: data.price.amount, currency: data.price.currency },
                 image: imageUpload.url || data.image,
                 catalogUrl: catalogUpload.url || data.catalogUrl,
@@ -68,7 +69,6 @@ const ProductEdit = ({ filters, product, open, onClose }: ProductEditProps) => {
             setShowError({ isOpen: true, message });
         }
     };
-console.log('catalogFile', catalogFile);
     return (
         <Modal
             open={open}
@@ -79,7 +79,7 @@ console.log('catalogFile', catalogFile);
                 <Typography variant="h5" borderBottom={1}>
                     {t('admin.products.edit.title')}
                 </Typography>
-                {isLoading ? (
+                {isLoading || isUploading ? (
                     <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
                         <CircularProgress />
                     </Box>
@@ -127,10 +127,13 @@ console.log('catalogFile', catalogFile);
                                         <Controller
                                             name="price.amount"
                                             control={control}
-                                            rules={{
-                                                required: t('admin.products.edit.priceRequired'),
-                                                min: { value: 0, message: t('admin.products.edit.priceMin') }
-                                            }}
+                                           rules={{
+                                                    min: {
+                                                        value: 0,
+                                                        message: t('admin.products.edit.priceMinError') || 'Fiyat 0\'dan küçük olamaz'
+                                                    }
+                                                }}
+                                            
                                             render={({ field }) => (
                                                 <TextField
                                                     {...field}
@@ -139,10 +142,7 @@ console.log('catalogFile', catalogFile);
                                                     type="number"
                                                     error={!!errors.price?.amount}
                                                     helperText={errors.price?.amount?.message}
-                                                    inputProps={{
-                                                        step: "0.01",
-                                                        min: "0"
-                                                    }}
+                                                  
                                                 />
                                             )}
                                         />
@@ -151,15 +151,18 @@ console.log('catalogFile', catalogFile);
                                         <Controller
                                             name="price.currency"
                                             control={control}
-                                            rules={{
-                                                required: "Para birimi gerekli"
-                                            }}
+                                            disabled={!watch('price.amount')}
+                                             rules={watch('price.amount') ? {
+                                                    required: t('admin.products.edit.currencyRequired')
+                                                }
+                                                    : undefined
+                                                }
                                             render={({ field }) => (
                                                 <TextField
                                                     {...field}
                                                     fullWidth
                                                     select
-                                                    label="Para Birimi"
+                                                    label={t('admin.products.edit.currencyLabel')}
                                                     error={!!errors.price?.currency}
                                                     helperText={errors.price?.currency?.message}
                                                 >
@@ -394,13 +397,13 @@ console.log('catalogFile', catalogFile);
                                     component="label"
                                     fullWidth
                                 >
-                                    {product.image ? (<><Typography variant="caption" paddingLeft={10}>
+                                    {product?.image ? (<><Typography variant="caption" paddingLeft={10}>
                                         < input type="file"
                                             name="image"
                                             accept="image/png,image/jpeg,image/jpg"
                                             onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                                             hidden
-                                        />{imageFile?.name ? imageFile.name : product.image}</Typography>
+                                        />{imageFile?.name ? imageFile.name : product?.image}</Typography>
                                     </>
                                     ) : (
                                         <Box>
@@ -427,14 +430,14 @@ console.log('catalogFile', catalogFile);
                                     component="label"
                                     fullWidth
                                 >
-                                    {product.catalogUrl ? (<><Typography variant="caption" paddingLeft={10}>
+                                    {product?.catalogUrl ? (<><Typography variant="caption" paddingLeft={10}>
                                         < input
                                             type="file"
                                             name="catalog"
                                             accept="application/pdf"
                                             onChange={(e) => setCatalogFile(e.target.files?.[0] || null)}
                                             hidden
-                                        />{catalogFile?.name ? catalogFile.name : product.catalogUrl}</Typography>
+                                        />{catalogFile?.name ? catalogFile.name : product?.catalogUrl}</Typography>
                                     </>) : (
                                         <Box>
 

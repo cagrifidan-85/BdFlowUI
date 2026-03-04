@@ -1,0 +1,46 @@
+.newsFeedSection {
+    &__card {
+        composes: sectionCard from "../sectionTheme.module.scss";
+        --section-card-bg: linear-gradient(140deg, #050914 0%, #081027 55%, #02050d 100%);
+        --section-card-text: #f4f6ff;
+        --section-card-border: rgba(79, 139, 255, 0.35);
+        --section-scroll-track: rgba(5, 9, 20, 0.4);
+        --section-scroll-thumb: linear-gradient(180deg, #9fd0ff, #4f8bff);
+        --section-item-bg: rgba(7, 13, 31, 0.92);
+        --section-item-border: rgba(79, 139, 255, 0.35);
+        --section-empty-bg: rgba(7, 13, 31, 0.65);
+        --section-empty-border: rgba(79, 139, 255, 0.4);
+        --section-button-bg: linear-gradient(120deg, #3c6dff, #77a9ff);
+        --section-outline-button-color: rgba(159, 193, 255, 0.85);
+        --section-outline-button-hover-bg: rgba(79, 139, 255, 0.18);
+    }
+
+    &__toolbar {
+        composes: sectionToolbar from "../sectionTheme.module.scss";
+    }
+
+    &__list {
+        composes: sectionList from "../sectionTheme.module.scss";
+        --section-list-max-height: 450px;
+    }
+
+    &__itemCard {
+        composes: sectionItemCard from "../sectionTheme.module.scss";
+    }
+
+    &__itemHeader {
+        composes: sectionItemHeader from "../sectionTheme.module.scss";
+    }
+
+    &__itemMeta {
+        composes: sectionItemMeta from "../sectionTheme.module.scss";
+    }
+
+    &__emptyState {
+        composes: sectionEmptyState from "../sectionTheme.module.scss";
+    }
+
+    &__actions {
+        composes: sectionActions from "../sectionTheme.module.scss";
+    }
+}

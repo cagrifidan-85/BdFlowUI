@@ -1,0 +1,219 @@
+:root {}
+
+.sectionCard {
+  --section-card-bg: linear-gradient(135deg, #060a18 0%, #0e1a36 55%, #050912 100%);
+  --section-card-text: #f4f6ff;
+  --section-card-border: rgba(95, 145, 255, 0.45);
+  --section-card-shadow: 0 30px 60px rgba(5, 12, 32, 0.45);
+  --section-card-blur: 20px;
+  --section-input-bg: rgba(6, 11, 28, 0.85);
+  --section-input-color: #f4f6ff;
+  --section-input-placeholder: rgba(244, 246, 255, 0.45);
+  --section-label-color: rgba(244, 246, 255, 0.72);
+  --section-label-color-focused: #aaccff;
+  --section-outline-color: rgba(95, 145, 255, 0.4);
+  --section-outline-color-focused: #aaccff;
+  --section-button-bg: linear-gradient(120deg, #4f8bff, #77b5ff);
+  --section-button-text: #061024;
+  --section-button-shadow: 0 14px 40px rgba(79, 139, 255, 0.35);
+  --section-outline-button-color: rgba(79, 139, 255, 0.65);
+  --section-outline-button-hover-bg: rgba(79, 139, 255, 0.1);
+  --section-scroll-track: rgba(6, 11, 28, 0.45);
+  --section-scroll-thumb: linear-gradient(180deg, #6fa4ff, #4f8bff);
+  --section-empty-bg: rgba(6, 11, 28, 0.6);
+  --section-empty-border: rgba(95, 145, 255, 0.4);
+  --section-item-bg: rgba(7, 12, 28, 0.92);
+  --section-item-border: rgba(95, 145, 255, 0.35);
+
+  position: relative;
+  border-radius: 26px;
+  border: 1px solid var(--section-card-border);
+  background: var(--section-card-bg) !important;
+  color: var(--section-card-text);
+  box-shadow: var(--section-card-shadow);
+  overflow: hidden;
+  isolation: isolate;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &::before {
+    background: radial-gradient(circle at 20% 15%, rgba(111, 164, 255, 0.35), transparent 55%);
+    opacity: 0.9;
+  }
+
+  &::after {
+    background: radial-gradient(circle at 80% 25%, rgba(0, 209, 255, 0.2), transparent 45%);
+    mix-blend-mode: screen;
+    opacity: 0.7;
+  }
+
+  :global(.MuiCardHeader-root),
+  :global(.MuiCardContent-root),
+  :global(.MuiCardActions-root) {
+    position: relative;
+    z-index: 1;
+    background: transparent;
+  }
+
+  :global(.MuiCardHeader-title),
+  :global(.MuiCardHeader-subheader) {
+    color: inherit;
+  }
+
+  :global(.MuiTypography-root) {
+    color: var(--section-card-text);
+  }
+
+  :global(.MuiFormControlLabel-label) {
+    color: var(--section-card-text);
+  }
+
+  :global(.MuiInputBase-root) {
+    background: var(--section-input-bg) !important;
+    color: var(--section-input-color) !important;
+    border-radius: 14px;
+    backdrop-filter: blur(var(--section-card-blur));
+  }
+
+  :global(.MuiInputBase-input::placeholder) {
+    color: var(--section-input-placeholder);
+  }
+
+  :global(.MuiFormLabel-root) {
+    color: var(--section-label-color) !important;
+  }
+
+  :global(.MuiFormLabel-root.Mui-focused) {
+    color: var(--section-label-color-focused) !important;
+  }
+
+  :global(.MuiOutlinedInput-notchedOutline) {
+    border-color: var(--section-outline-color) !important;
+    border-width: 1.5px;
+  }
+
+  :global(.Mui-focused .MuiOutlinedInput-notchedOutline) {
+    border-color: var(--section-outline-color-focused) !important;
+    box-shadow: 0 0 0 1px var(--section-outline-color-focused);
+  }
+
+  :global(.MuiSwitch-track) {
+    background: linear-gradient(90deg, rgba(30, 43, 79, 0.95), rgba(79, 139, 255, 0.95)) !important;
+    opacity: 1 !important;
+  }
+
+  :global(.MuiSwitch-thumb) {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  }
+
+  :global(.MuiButton-containedPrimary),
+  :global(.MuiButton-contained) {
+    background: var(--section-button-bg);
+    color: var(--section-button-text);
+    border-radius: 999px;
+    padding-inline: 1.8rem;
+    font-weight: 600;
+    box-shadow: var(--section-button-shadow);
+
+    &:hover {
+      filter: brightness(1.05);
+    }
+  }
+
+  :global(.MuiButton-outlined) {
+    border-color: var(--section-outline-button-color);
+    color: var(--section-card-text);
+    border-radius: 999px;
+    font-weight: 500;
+
+    &:hover {
+      border-color: var(--section-outline-button-color);
+      background: var(--section-outline-button-hover-bg);
+    }
+  }
+}
+
+.sectionToolbar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.sectionList {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: var(--section-list-max-height, 420px);
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  margin-right: -0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--section-scroll-thumb) var(--section-scroll-track);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--section-scroll-track);
+    border-radius: 999px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--section-scroll-thumb);
+    border-radius: 999px;
+  }
+}
+
+.sectionItemCard {
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid var(--section-item-border);
+  background: var(--section-item-bg) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 14px 30px rgba(5, 12, 32, 0.25);
+  backdrop-filter: blur(var(--section-card-blur));
+}
+
+.sectionItemHeader {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.sectionItemMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sectionEmptyState {
+  padding: 32px;
+  border-radius: 22px;
+  text-align: center;
+  background: var(--section-empty-bg);
+  border: 1px dashed var(--section-empty-border);
+  color: var(--section-card-text);
+}
+
+.sectionActions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 18px !important;
+}

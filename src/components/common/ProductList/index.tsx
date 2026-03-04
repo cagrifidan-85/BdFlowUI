@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ProductCard from '../Product';
 import { Box, Select, MenuItem, InputLabel, FormControl, Typography } from '@mui/material';
-import { ProductType } from '@constants/index';
+import { ProductFiltersModel, ProductType } from '@constants/index';
 import styles from './style.module.scss';
 import { useTranslation } from "react-i18next";
 import ProductDetailModal from './ProductDetailModal';
@@ -11,11 +11,12 @@ type SortKey = 'price' | 'name' | 'bestSeller';
 
 interface ProductListProps {
     products: ProductType[]
+    filters?:ProductFiltersModel 
     onAddToCart?: () => void
     onDetails?: () => void
 }
 
-const ProductList: React.FC<ProductListProps> = ({ products }) => {
+const ProductList: React.FC<ProductListProps> = ({ products, filters }) => {
     const { t } = useTranslation();
     const [sortKey, setSortKey] = useState<SortKey>('name');
     const [selectedProduct, setSelectedProduct] = useState<ProductType | undefined>(undefined);
@@ -37,7 +38,7 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
 
         <Box className={styles.productList}>
             <Box className={styles.productList__filter}>
-                <Typography variant="h6" fontWeight="bold">{t('productsheader')} {` ( ${products.length} )`} </Typography>
+                <Typography variant="h6" fontWeight="bold">{t('products.label')} {` ( ${products.length} )`} </Typography>
                 <FormControl className={styles.productList__filterControl} size="small">
                     <InputLabel id="sort-label">{t('order.products')}</InputLabel>
                     <Select
@@ -64,7 +65,7 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
                     </Box>}
 
             </Box>
-            <ProductDetailModal open={selectedProduct !== undefined && isOpenDetailModal} onClose={() => setIsOpenDetailModal(false)} product={selectedProduct} />
+            <ProductDetailModal open={selectedProduct !== undefined && isOpenDetailModal} onClose={() => setIsOpenDetailModal(false)} filtersData={filters} product={selectedProduct} />
         </Box>
     );
 };

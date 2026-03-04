@@ -1,0 +1,42 @@
+.campaignSection {
+    &__card {
+        composes: sectionCard from "../sectionTheme.module.scss";
+        --section-card-bg: linear-gradient(135deg, #070f27 0%, #0f2347 55%, #050915 100%);
+        --section-card-text: #eef3ff;
+        --section-card-border: rgba(100, 150, 255, 0.4);
+        --section-card-shadow: 0 30px 60px rgba(5, 12, 32, 0.4);
+        --section-input-bg: rgba(5, 11, 30, 0.85);
+        --section-outline-color: rgba(103, 146, 255, 0.45);
+        --section-outline-color-focused: #a5c5ff;
+        --section-scroll-track: rgba(10, 18, 38, 0.4);
+        --section-scroll-thumb: linear-gradient(180deg, #80caff, #4f8bff);
+        --section-item-bg: rgba(7, 12, 26, 0.92);
+        --section-item-border: rgba(104, 150, 255, 0.35);
+    }
+
+    &__toolbar {
+        composes: sectionToolbar from "../sectionTheme.module.scss";
+    }
+
+    &__list {
+        composes: sectionList from "../sectionTheme.module.scss";
+        --section-list-max-height: 420px;
+    }
+
+    &__itemCard {
+        composes: sectionItemCard from "../sectionTheme.module.scss";
+        padding: 18px;
+    }
+
+    &__itemHeader {
+        composes: sectionItemHeader from "../sectionTheme.module.scss";
+    }
+
+    &__emptyState {
+        composes: sectionEmptyState from "../sectionTheme.module.scss";
+    }
+
+    &__actions {
+        composes: sectionActions from "../sectionTheme.module.scss";
+    }
+}

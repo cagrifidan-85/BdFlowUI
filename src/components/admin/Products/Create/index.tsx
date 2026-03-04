@@ -1,14 +1,16 @@
-import { Box, Grid, Modal, Typography, TextField, Button, MenuItem, Alert, AlertTitle, Snackbar } from "@mui/material";
+import { Box, Grid, Modal, Typography, TextField, Button, MenuItem } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import styles from "./style.module.scss"
 import { ProductType, ProductFiltersModel } from "@constants/index";
-import { useCreateProductMutation, useUploadImageMutation } from "@apis/products";
+import { useCreateProductMutation } from "@apis/products";
 import { useForm, Controller } from "react-hook-form";
-import { useState } from "react";
-import CheckIcon from '@mui/icons-material/Check';
+import { useState, useEffect } from "react";
+import { ResultModal } from "@components/common/ResultModal";
+import { useUploadFile } from "@components/admin/hooks";
+import { useGetResultContext } from "@components/common/ResultModal/useGetResultContext";
 
 interface CreateProductProps {
-    filters: ProductFiltersModel
+    filters?: ProductFiltersModel
     open: boolean;
     onClose: () => void;
 }
@@ -24,14 +26,20 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
     const { t } = useTranslation()
     const lang = localStorage.getItem('currentLang');
     const [createProduct, { isLoading }] = useCreateProductMutation();
-    const [uploadImage] = useUploadImageMutation();
+    const { uploadSingleFile } = useUploadFile();
+
+    const { isOpenSnackBar,
+        isSuccess,
+        message,
+        setResultContent,
+        closeSnackbar } = useGetResultContext();
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [catalogFile, setCatalogFile] = useState<File | null>(null);
-    const [showSuccess, setShowSuccess] = useState(false);
-    const [showError, setShowError] = useState({ isOpen: false, message: "" });
     const {
         handleSubmit,
         control,
+        watch,
+        setValue,
         formState,
         formState: { errors },
         reset
@@ -39,19 +47,20 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
         defaultValues: undefined
     })
 
+    const priceAmount = watch('price.amount');
+
+    useEffect(() => {
+        if (!priceAmount || priceAmount === 0 || priceAmount < 0) {
+            setValue('price.currency', '');
+        }
+    }, [priceAmount, setValue]);
+
     const handleClose = () => {
         reset();
         setImageFile(null);
         setCatalogFile(null);
         onClose();
     }
-    const uploadSingleFile = async (name:string,file: File | null) => {
-        if (!file) return { url: "" };
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("name", name);
-        return uploadImage(formData).unwrap();
-    };
 
     const onSubmit = async (data: ProductType) => {
         try {
@@ -68,18 +77,18 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
 
             const res = await createProduct(payload).unwrap();
             if (res) {
-                setShowSuccess(true);
+                setResultContent(true, "Product created successfully", true);
                 handleClose();
             }
         } catch (error: any) {
             const message = error?.data?.message?.toString?.() || "An error occurred";
-            setShowError({ isOpen: true, message });
+            setResultContent(false, message, true);
         }
     }
 
     return (
         <Modal
-            open={open}
+            open={isOpenSnackBar}
             onClose={handleClose}
             style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
 
@@ -131,8 +140,10 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                                 name="price.amount"
                                                 control={control}
                                                 rules={{
-                                                    required: t('admin.products.edit.priceRequired'),
-                                                    min: { value: 0, message: t('admin.products.edit.priceMin') }
+                                                    min: {
+                                                        value: 0,
+                                                        message: t('admin.products.edit.priceMinError') || 'Fiyat 0\'dan küçük olamaz'
+                                                    }
                                                 }}
                                                 render={({ field }) => (
                                                     <TextField
@@ -142,9 +153,9 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                                         label={t('admin.products.create.pricePlaceholder')}
                                                         error={!!errors.price?.amount}
                                                         helperText={errors.price?.amount?.message}
-                                                        inputProps={{
-                                                            step: "0.01",
-                                                            min: "0"
+                                                        onChange={(e) => {
+                                                            const value = e.target.value;
+                                                            field.onChange(value ? Math.max(0, Number(value)) : '');
                                                         }}
                                                     />
                                                 )}
@@ -154,10 +165,11 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                             <Controller
                                                 name="price.currency"
                                                 control={control}
-                                                rules={{
-                                                    required: t('')
+                                                disabled={!watch('price.amount')}
+                                                rules={watch('price.amount') ? {
+                                                    required: t('admin.products.edit.currencyRequired')
                                                 }
-
+                                                    : undefined
                                                 }
                                                 render={({ field }) => (
                                                     <TextField
@@ -376,25 +388,8 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                         )}
                                     />
                                 </Grid>
+
                                 <Grid size={{ xs: 12, sm: 6 }}>
-                                    <Controller
-                                        name="catalogUrl"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <TextField
-                                                {...field}
-                                                error={!!errors.catalogUrl}
-                                                helperText={errors.catalogUrl?.message}
-                                                fullWidth
-                                                label={t('admin.products.create.catalogUrlPlaceholder')}
-                                            />
-                                        )}
-                                    />
-                                </Grid>
-
-
-
-                                <Grid size={{ xs: 12 }}>
                                     <Controller
                                         name="measurementRange"
                                         rules={{ required: t('admin.products.edit.measurementRangeRequired') }}
@@ -474,29 +469,12 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
 
                     </Box>
                 </Box>
-                <Snackbar
-                    open={showSuccess}
-                    autoHideDuration={1500}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                    onClose={() => setShowSuccess(false)}
-                >
-                    <Alert icon={<CheckIcon fontSize="inherit" />} severity="success" onClose={() => setShowSuccess(false)}>
-                        <AlertTitle>{t('admin.products.edit.successTitle')}</AlertTitle>
-                        {t('admin.products.edit.successMessage')}
-                    </Alert>
-                </Snackbar>
-
-                <Snackbar
-                    open={showError.isOpen}
-                    autoHideDuration={3000}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                    onClose={() => setShowError({ isOpen: false, message: "" })}
-                >
-                    <Alert severity="error" onClose={() => setShowError({ isOpen: false, message: "" })}>
-                        <AlertTitle>{t('admin.products.edit.errorTitle')}</AlertTitle>
-                        {`${t('message')} ${showError.message}`}
-                    </Alert>
-                </Snackbar>
+                <ResultModal
+                    open={isOpenSnackBar}
+                    isSuccess={isSuccess}
+                    onClose={closeSnackbar}
+                    message={message}
+                />
             </Box>
 
         </Modal >

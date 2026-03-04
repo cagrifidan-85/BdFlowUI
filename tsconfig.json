@@ -9,6 +9,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
+    "baseUrl": "src",
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -16,15 +17,16 @@
     "noEmit": true,
     "jsx": "preserve",
     "paths": {
-      "@logos/*": ["./src/logos/*"],
-      "@images/*": ["./src/images/*"],
-      "@apis/*": ["./src/apis/*"],
-      "@components/*": ["./src/components/*"],
-      "@constants/*": ["./src/constants/*"],
-      "@hooks/*": ["./src/hooks/*"],
-      "@i18n/*": ["./src/i18n/*"],
-      "@pages/*": ["./src/pages/*"],
-      "@utils/*": ["./src/utils/*"]
+      "@logos/*": ["logos/*"],
+      "@images/*": ["images/*"],
+      "@apis/*": ["apis/*"],
+      "@components/*": ["components/*"],
+      "@constants/*": ["constants/*"],
+      "@hooks/*": ["hooks/*"],
+      "@i18n/*": ["i18n/*"],
+      "@pages/*": ["pages/*"],
+      "@utils/*": ["utils/*"],
+      "@app-types/*": ["types/*"]
     }
   },
   "include": ["src/**/*"]
