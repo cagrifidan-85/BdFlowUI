@@ -1,6 +1,6 @@
 
 import { baseApi } from '../index';
-import { ProductType } from '@constants/index';
+import { ProductFiltersModel, ProductType } from '@constants/index';
 
 
 export interface UpdateProductRequest extends Partial<ProductType> {
@@ -47,7 +47,6 @@ export const productsApi = baseApi.injectEndpoints({
         updateProduct: builder.mutation<ProductType, UpdateProductRequest>({
             query: (req) => (
                 
-                console.log('updateProduct body', req.id),
                 {
                 url: `/api/products/${req.id}`,
                 method: 'PUT',
@@ -74,7 +73,7 @@ export const productsApi = baseApi.injectEndpoints({
         // Upload image
         uploadImage: builder.mutation<UploadImageResponse, FormData>({
             query: (formData) => ({
-                url: '/api/upload',
+                url: '/api/images/upload',
                 method: 'POST',
                 body: formData,
             }),
@@ -83,11 +82,11 @@ export const productsApi = baseApi.injectEndpoints({
         // Delete image
         deleteImage: builder.mutation<{ message: string }, string>({
             query: (publicId) => ({
-                url: `/api/upload/${publicId}`,
+                url: `/api/images/${publicId}`,
                 method: 'DELETE',
             }),
         }),
-        getFilters: builder.query<any, void>({
+        getFilters: builder.query<ProductFiltersModel, void>({
             query: () => '/api/products/filters/all',
         }),
 

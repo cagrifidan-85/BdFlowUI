@@ -5,18 +5,18 @@ import styles from "./style.module.scss";
 import ChooseMaterial from "./chooseMaterial";
 import ChooseEnvironment from "./chooseEnvironment";
 import ChooseProduct from "./chooseProduct";
-import { EnvironmentType, MaterialType, ProductFiltersModel, ProductType } from "@constants/index";
+import {  FilterBaseModel, ProductFiltersModel, ProductType } from "@constants/index";
 
 interface CalculateProductProps {
   products:ProductType[]
-  filters:ProductFiltersModel
-  onSelectMaterial: (value: MaterialType) => void;
-  onSelectEnvironment: (value: EnvironmentType) => void;
+  filters?:ProductFiltersModel
+  onSelectMaterial: (value: string) => void;
+  onSelectEnvironment: (value: string) => void;
   onSelectProduct: (value: string) => void;
   isSelectionActive: boolean
   onSelectionActive: (value: boolean) => void
-  material?:MaterialType
-  environment?:EnvironmentType
+  material?:string
+  environment?:string
 }
 
 
@@ -61,7 +61,7 @@ const CalculateProduct: React.FC<CalculateProductProps> = ({
           <ChooseEnvironment data={filters?.environments} onItemSelected={(value) => onSelectEnvironment(value)} onNext={handleNext} onBack={handleBack} />
         </Collapse>
         <Collapse in={currentStep === 2}>
-          <ChooseProduct onItemSelected={(value: string) => onSelectProduct(value)} onBack={handleBack} products={products} material={material} environment={environment} />
+          <ChooseProduct onItemSelected={(value: string) => onSelectProduct(value)} onBack={handleBack} products={products} material={material} environment={environment} filtersData={filters} />
         </Collapse>
       </Collapse>
     </Box>

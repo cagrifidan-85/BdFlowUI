@@ -1,17 +1,19 @@
-import { ProductType } from "@constants/index"
+import { ProductFiltersModel, ProductType } from "@constants/index"
 import styles from "./style.module.scss"
 import { Box, Modal, Typography } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import FilePresentIcon from '@mui/icons-material/FilePresent';
 
 interface DetailProps {
-  product: ProductType
+  product?: ProductType
+  filters?:ProductFiltersModel 
   open: boolean
   onClose: () => void
 }
-const ProductDetail = ({ product, open, onClose }: DetailProps) => {
+const ProductDetail = ({ product, filters, open, onClose }: DetailProps) => {
 
   const { t } = useTranslation()
+  const lang = localStorage.getItem("currentLang")
   return (
 
     <Modal
@@ -29,14 +31,14 @@ const ProductDetail = ({ product, open, onClose }: DetailProps) => {
         <Box className={styles.productDetail__body}>
           <Box className={styles.productDetail__bodyFields}>
 
-            <Box className={styles.productDetail__bodyFieldsItem}> <h4>{t('admin.products.productName')} : </h4> {product.name} </Box>
-            <Box className={styles.productDetail__bodyFieldsItem}> <h4>{t('admin.products.category')} : </h4> {product.category} </Box>
-            <Box className={styles.productDetail__bodyFieldsItem}> <h4>{t('admin.products.measurementRange')} : </h4> {product.measurementRange} </Box>
-            <Box className={styles.productDetail__bodyFieldsItemLarge} > <h4>{t('admin.products.description')} : </h4> {product.description} </Box>
+            <Box className={styles.productDetail__bodyFieldsItem}> <h4>{t('admin.products.productName')} : </h4> {product?.name} </Box>
+            <Box className={styles.productDetail__bodyFieldsItem}> <h4>{t('admin.products.category')} : </h4> {product?.category ? filters?.categories?.filter((category) => category.code === product.category)[0]?.[lang as 'tr' | 'en'] ?? '' : ''} </Box>
+            <Box className={styles.productDetail__bodyFieldsItem}> <h4>{t('admin.products.measurementRange')} : </h4> {product?.measurementRange} </Box>
+            <Box className={styles.productDetail__bodyFieldsItemLarge} > <h4>{t('admin.products.description')} : </h4> {product?.description} </Box>
 
           </Box>
           <Box className={styles.productDetail__bodyActions}>
-            {product.image && (
+            {product?.image && (
               <img src={product.image} loading="lazy" alt="Product" />
             )}
             {product?.catalogUrl && (

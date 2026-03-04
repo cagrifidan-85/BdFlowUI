@@ -124,8 +124,7 @@ const handleImageUpload = async (file: File) => {
   formData.append('image', file);
   
   const result = await uploadImage(formData).unwrap();
-  console.log('Image URL:', result.url);
-  console.log('Public ID:', result.publicId);
+
 };
 ```
 

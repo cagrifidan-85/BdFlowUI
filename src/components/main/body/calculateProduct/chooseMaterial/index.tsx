@@ -4,11 +4,11 @@ import { useTranslation } from "react-i18next";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import styles from "./style.module.scss";
 import classnames from 'classnames/bind'
-import { FiterBaseModel, MaterialType } from "@constants/index";
+import { FilterBaseModel } from "@constants/index";
 
 interface ChooseMaterialProps {
-  data?:FiterBaseModel[]
-  onItemSelected: (value: MaterialType) => void;
+  data?:FilterBaseModel[]
+  onItemSelected: (value: string) => void;
   onNext?: () => void;
 }
 
@@ -16,7 +16,7 @@ const cx = classnames.bind(styles)
 
 const ChooseMaterial: React.FC<ChooseMaterialProps> = ({ data,  onItemSelected, onNext }) => {
   const { t } = useTranslation();
-  const [itemSelected,setItemSelected]= useState<MaterialType>()
+  const [itemSelected,setItemSelected]= useState<string>()
   const lang = localStorage.getItem("currentLang");
 
 
@@ -27,11 +27,11 @@ const getMaterialImage = (code: string) => {
     return ''; // Return empty string if image not found
   }
 };
-  const handleItemSelect =(item:MaterialType)=>{
+  const handleItemSelect =(item:FilterBaseModel)=>{
 
-    setItemSelected(item)
+    setItemSelected(item.code)
 
-    onItemSelected(item)
+    onItemSelected(item.code)
   }
   return (
     <Box className={styles.chooseMaterial}>
@@ -42,7 +42,7 @@ const getMaterialImage = (code: string) => {
             className={cx('chooseMaterial__materials', {
               'chooseMaterial__materials--selected': itemSelected===item.code,
             })}
-            onClick={() =>handleItemSelect(item.code as MaterialType)}
+            onClick={() =>handleItemSelect(item)}
           >
             <img
               key={item.code}

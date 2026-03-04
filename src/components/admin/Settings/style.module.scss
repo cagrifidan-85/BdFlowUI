@@ -1,8 +1,61 @@
-.settings{
+.settings {
     display: flex;
-    width: 100%;
     flex-direction: column;
-    padding: 20px;
-    gap: 20px;
-    background-color: azure;
+    gap: 24px;
+    width: 100%;
+    padding: 36px;
+    min-height: 100%;
+    font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+    color: #e6edff;
+    background: radial-gradient(circle at 15% 20%, rgba(38, 99, 255, 0.25), transparent 45%),
+        radial-gradient(circle at 80% 10%, rgba(3, 223, 252, 0.2), transparent 40%),
+        linear-gradient(135deg, #030714 0%, #060f24 55%, #030714 100%);
+
+    &__hero {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding: 28px;
+        border-radius: 26px;
+        background: rgba(3, 8, 22, 0.85);
+        border: 1px solid rgba(122, 174, 255, 0.25);
+        box-shadow:
+            0 35px 65px rgba(2, 6, 20, 0.45),
+            inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        backdrop-filter: blur(18px);
+    }
+
+    &__heroTitle {
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        font-size: 1.65rem;
+        color: #f4f7ff;
+    }
+
+    &__heroStats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    &__heroChip {
+        font-weight: 600;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: rgba(8, 19, 47, 0.9);
+        border: 1px solid rgba(122, 174, 255, 0.28);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    &__grid {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .settings {
+        padding: 26px 16px;
+    }
 }

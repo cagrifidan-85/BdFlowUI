@@ -12,7 +12,8 @@ module.exports = {
       '@utils': path.resolve(__dirname, 'src/utils/'),
       '@images': path.resolve(__dirname, 'src/images/'),
       '@logos': path.resolve(__dirname, 'src/logos/'),
-      '@img': path.resolve(__dirname, 'logos/')
+      '@img': path.resolve(__dirname, 'logos/'),
+      '@app-types': path.resolve(__dirname, 'src/types/')
     }
   },
   eslint: {

@@ -5,8 +5,22 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import logo from "@images/navigationLogo.jpg";
 import styles from "./style.module.scss"
+import { useTranslation } from "react-i18next";
+import { useGetSiteSettingsQuery } from "@apis/siteSettings";
 
 const Footer = () => {
+  const { t } = useTranslation();
+  const { data: siteSettings } = useGetSiteSettingsQuery(undefined, {
+    refetchOnFocus: false,
+    refetchOnReconnect: false,
+    pollingInterval: 300000,
+  });
+  const currentYear = new Date().getFullYear();
+  const contact = siteSettings?.contact ?? {
+    email: t('footer.contact.email'),
+    phone: t('footer.contact.phone'),
+    address: t('footer.contact.address'),
+  };
   return (
     <Box component="footer" className={styles.footer}>
       <Box className={styles.footer__row}>
@@ -15,24 +29,24 @@ const Footer = () => {
               <img src={logo} alt="BdFlow Logo"  className={styles.footer__rowColLeftLogo} />
             </Box>
             <Typography  className={styles.footer__rowColLeftBrand}>
-              Endüstriyel otomasyon ve sensör teknolojilerinde yenilikçi çözümler sunuyoruz. Güvenilirlik ve kaliteyle işinizi ileriye taşıyın.
+              {t('footer.brand.description')}
             </Typography>
         </Box>
 
         <Box className={styles.footer__rowColMiddle}>
           <Box className={styles.footer__rowColMiddleMenu}>
-            <Link href="#" underline="hover" className={styles.footer__rowColMiddleMenuLink}>Ana Sayfa</Link>
-            <Link href="#" underline="hover" className={styles.footer__rowColMiddleMenuLink}>Ürünler</Link>
-            <Link href="#" underline="hover" className={styles.footer__rowColMiddleMenuLink}>Hakkımızda</Link>
-            <Link href="#" underline="hover" className={styles.footer__rowColMiddleMenuLink}>İletişim</Link>
+            <Link href="#" underline="hover" className={styles.footer__rowColMiddleMenuLink}>{t('footer.menu.home')}</Link>
+            <Link href="#" underline="hover" className={styles.footer__rowColMiddleMenuLink}>{t('footer.menu.products')}</Link>
+            <Link href="#" underline="hover" className={styles.footer__rowColMiddleMenuLink}>{t('footer.menu.about')}</Link>
+            <Link href="#" underline="hover" className={styles.footer__rowColMiddleMenuLink}>{t('navigation.menu.communication')}</Link>
           </Box>
           <Box className={styles.footer__rowColMiddleCopyright}>
-            © {new Date().getFullYear()} BdFlow. Tüm hakları saklıdır.
+            {t('footer.copyright', { year: currentYear })}
           </Box>
         </Box>
 
         <Box className={styles.footer__rowColSocial}>
-          <Typography variant="subtitle1" fontWeight={600} className={styles.footer__rowColSocialTitle}>Bizi Takip Edin</Typography>
+          <Typography variant="subtitle1" fontWeight={600} className={styles.footer__rowColSocialTitle}>{t('footer.social.title')}</Typography>
           <Box className={styles.footer__rowColSocialIcons}>
             <IconButton color="primary" size="small" href="#" className={styles.footer__rowColSocialIcon}><FacebookIcon /></IconButton>
             <IconButton color="primary" size="small" href="#" className={styles.footer__rowColSocialIcon}><TwitterIcon /></IconButton>
@@ -42,11 +56,11 @@ const Footer = () => {
         </Box>
 
         <Box className={styles.footer__rowColRight}>
-          <Typography variant="subtitle1" fontWeight={600} className={styles.footer__rowColRightTitle}>İletişim</Typography>
+          <Typography variant="subtitle1" fontWeight={600} className={styles.footer__rowColRightTitle}>{t('footer.contact.title')}</Typography>
           <Box className={styles.footer__rowColRightContent}>
-            <Typography variant="body2">info@bdflow.com</Typography>
-            <Typography variant="body2">+90 212 000 00 00</Typography>
-            <Typography variant="body2">İstanbul, Türkiye</Typography>
+            <Typography variant="body2">{contact.email}</Typography>
+            <Typography variant="body2">{contact.phone}</Typography>
+            <Typography variant="body2">{contact.address}</Typography>
           </Box>
         </Box>
 

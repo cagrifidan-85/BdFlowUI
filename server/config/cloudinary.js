@@ -9,19 +9,8 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Configure Cloudinary Storage
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: (req, file) => {
-    const isPdf = file.mimetype === 'application/pdf';
-    return {
-      folder: 'bdflow-products',
-      allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'pdf'],
-      resource_type: isPdf ? 'raw' : 'image',
-      transformation: isPdf ? [] : [{ width: 800, height: 800, crop: 'limit' }]
-    };
-  }
-});
+// Use memory storage for manual upload control
+const storage = multer.memoryStorage();
 
 const upload = multer({ 
   storage: storage,

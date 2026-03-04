@@ -1,44 +1,187 @@
+/* Product card base styles: fixed size and safe overflow */
 .product {
     display: flex;
     flex-direction: column;
     width: 280px;
+    height: 480px;
     margin: 16px;
-    border-radius: 20px !important;
+    border-radius: 12px !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     overflow: hidden;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        transform: translateY(-4px);
+    }
 
     &__image {
-        object-fit: cover;
-        width: 100%;
-        height: 180px;
+        object-fit: contain;
+        align-self: center;
+        max-width: 90%;
+        height: 130px;
+        border-radius: 8px;
+        margin-top: 4px;
+    }
+
+    /* Fixed content grid: compact rows fit 480px total */
+    &__content {
+        flex: 1;
+        display: grid;
+        padding: 10px;
+        gap: 5px;
     }
 
     &__contentName {
-        font-weight: 600;
-        margin-bottom: 4px;
-    }
-
-    &__contentType {
-        color: #888;
-        margin-bottom: 8px;
-    }
-
-    &__contentRange {
-        color: #555;
-        margin-bottom: 4px;
-    }
-
-    &__contentDescription {
-        color: #444;
-        margin-bottom: 8px;
-    }
-
-    &__contentPrice {
         font-weight: 700;
-        margin-bottom: 8px;
+        color: #1976d2;
+        font-size: 1rem;
+        min-height: 32px;
+        display: -webkit-box;
+        line-clamp: 2; /* standard property for compatibility */
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
-    &__content {
-        padding: 16px;
+    /* Category row always occupies space */
+    &__categoryChip {
+        display: flex;
+        align-items: center;
+        min-height: 22px;
+        font-weight: 500;
+    }
+
+    /* Details grid container - fixed height */
+    &__detailsGrid {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr; /* two rows */
+        row-gap: 6px;
+    }
+
+    /* Info boxes */
+    .measureBox {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px;
+        border-radius: 6px;
+        border: 1px solid lightgrey;
+        min-height: 42px;
+    }
+
+    .stockBox {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px;
+        border-radius: 6px;
+        border: 1px solid lightgrey;
+        min-height: 42px;
+    }
+    .stockSuccess {
+        border: 1px solid lightgrey;
+    }
+    .stockError {
+        border: 1px solid #ef9a9a;
+    }
+
+    /* Labels */
+    .labelCaption {
+        color: #666;
+        font-weight: 600;
+        display: block;
+    }
+    .labelBodyOrange {
+        color: #f57c00;
+        font-weight: 600;
+    }
+    .labelBodyStockSuccess {
+        color: #2e7d32;
+        font-weight: 600;
+    }
+    .labelBodyStockError {
+        color: #c62828;
+        font-weight: 600;
+    }
+
+    /* Description */
+    &__contentDescription {
+        color: #555;
+        line-height: 1.4;
+        min-height: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Price */
+    &__contentPrice {
+        display: flex;
+        flex-direction: column;
+    }
+    .priceBox {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px;
+        border-radius: 6px;
+        border: 1px solid lightgrey;
+        min-height: 48px;
+    }
+    &__contentPriceContent {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+    .priceText {
+        font-weight: 700;
+        color: #c62828;
+    }
+    .priceCurrency {
+        font-size: 0.85em;
+    }
+    .priceRequestBox {
+        padding: 6px;
+        border-radius: 6px;
+        background: #f5f5f5;
+        border: 1px solid #e0e0e0;
+        text-align: center;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Actions - fixed height */
+    &__actions {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        height: 40px;
+    }
+    .btnTight {
+        font-weight: 600;
+        text-transform: none;
+        flex: 1;
+    }
+
+    /* Icons */
+    .iconMeasure {
+        color: #ff9800;
+        font-size: 1.2rem;
+    }
+    .iconStockSuccess {
+        color: #4caf50;
+        font-size: 1.2rem;
+    }
+    .iconStockError {
+        color: #f44336;
+        font-size: 1.2rem;
+    }
+    .iconPrice {
+        color: #d32f2f;
+        font-size: 1.1rem;
     }
 }

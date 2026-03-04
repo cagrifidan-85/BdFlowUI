@@ -1,0 +1,36 @@
+.contactSection {
+    &__card {
+        composes: sectionCard from "../sectionTheme.module.scss";
+        --section-card-bg: radial-gradient(circle at 12% 25%, rgba(86, 139, 255, 0.25), transparent 45%),
+          radial-gradient(circle at 85% 10%, rgba(2, 214, 255, 0.25), transparent 40%),
+          linear-gradient(135deg, #030815 0%, #0a1b3b 55%, #040a18 100%);
+        --section-card-text: #eff4ff;
+        --section-card-border: rgba(107, 164, 255, 0.35);
+        --section-card-shadow: 0 28px 60px rgba(4, 8, 24, 0.55);
+        --section-input-bg: rgba(6, 13, 32, 0.85);
+        --section-input-color: #f4f7ff;
+        --section-input-placeholder: rgba(244, 247, 255, 0.45);
+        --section-label-color: rgba(244, 247, 255, 0.68);
+        --section-label-color-focused: #8bbcff;
+        --section-outline-color: rgba(107, 164, 255, 0.35);
+        --section-outline-color-focused: #8bbcff;
+        --section-button-bg: linear-gradient(120deg, #4f8bff, #77b5ff);
+        --section-button-text: #050c1f;
+        --section-button-shadow: 0 16px 38px rgba(79, 139, 255, 0.35);
+        --section-outline-button-color: rgba(111, 164, 255, 0.45);
+        --section-outline-button-hover-bg: rgba(111, 164, 255, 0.12);
+        --section-item-bg: rgba(6, 12, 28, 0.85);
+
+        :global(.MuiInputAdornment-root svg) {
+            color: rgba(151, 195, 255, 0.75);
+        }
+    }
+
+    &__actions {
+        composes: sectionActions from "../sectionTheme.module.scss";
+    }
+
+    &__actionsItem {
+        margin-right: auto;
+    }
+}

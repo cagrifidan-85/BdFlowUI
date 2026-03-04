@@ -15,7 +15,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/products', require('./routes/products'));
-app.use('/api/upload', require('./routes/upload'));
+app.use('/api/images', require('./routes/images'));
+app.use('/api/settings', require('./routes/settings'));
 
 // Health check
 app.get('/api/health', (req, res) => {
