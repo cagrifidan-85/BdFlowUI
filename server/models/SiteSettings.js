@@ -98,6 +98,22 @@ const SiteSettingsSchema = new mongoose.Schema(
         type: String,
         default: 'İstanbul, Türkiye',
       },
+      facebookUrl: {
+        type: String,
+        default: '',
+      },
+      twitterUrl: {
+        type: String,
+        default: '',
+      },
+      instagramUrl: {
+        type: String,
+        default: '',
+      },
+      linkedinUrl: {
+        type: String,
+        default: '',
+      },
     },
     campaignPopup: {
       enabled: {

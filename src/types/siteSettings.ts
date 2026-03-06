@@ -11,6 +11,10 @@ export interface ContactContent {
   email: string;
   phone: string;
   address: string;
+  facebookUrl: string;
+  twitterUrl: string;
+  instagramUrl: string;
+  linkedinUrl: string;
 }
 
 export interface CampaignContentItem {
@@ -63,6 +67,10 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
     email: 'info@bdflow.com',
     phone: '+90 212 000 00 00',
     address: 'İstanbul, Türkiye',
+    facebookUrl: '',
+    twitterUrl: '',
+    instagramUrl: '',
+    linkedinUrl: '',
   },
   campaignPopup: {
     enabled: false,

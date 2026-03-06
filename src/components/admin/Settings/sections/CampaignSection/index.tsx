@@ -12,6 +12,7 @@ import {
   IconButton,
   MenuItem,
   Paper,
+  Skeleton,
   Stack,
   Switch,
   TextField,
@@ -92,156 +93,200 @@ const CampaignSection: FC<CampaignSectionProps> = ({
         }
       />
       <CardContent>
-        <Stack spacing={3}>
-          <Box className={styles.campaignSection__toolbar}>
-            <Button
-              variant="outlined"
-              startIcon={<AddCircleOutlineIcon />}
-              onClick={onAddItem}
-              disabled={isSiteSettingsLoading}
-            >
-              {t("admin.settings.campaign.addItem")}
-            </Button>
-            <Tooltip title={t("admin.settings.campaign.helper") ?? ""} placement="top" arrow>
-              <IconButton size="small" aria-label={t("admin.settings.campaign.helper")}>
-                <InfoOutlinedIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          </Box>
+        {isSiteSettingsLoading ? (
+          <Stack spacing={3}>
+            <Box className={styles.campaignSection__toolbar}>
+              <Skeleton variant="rectangular" height={36} width={180} />
+              <Skeleton variant="circular" width={32} height={32} />
+            </Box>
 
-          <Box className={styles.campaignSection__list}>
-            {hasCampaignItems ? (
-              campaignItems.map((item) => (
-                <Paper key={item.itemId} className={styles.campaignSection__itemCard} elevation={0}>
+            <Box className={styles.campaignSection__list}>
+              {Array.from({ length: 2 }).map((_, index) => (
+                <Paper
+                  key={`campaign-skeleton-${index}`}
+                  className={styles.campaignSection__itemCard}
+                  elevation={0}
+                >
                   <Stack spacing={2}>
                     <Box className={styles.campaignSection__itemHeader}>
-                      <TextField
-                        fullWidth
-                        label={t("admin.settings.campaign.titleLabel")}
-                        value={item.title}
-                        onChange={onItemChange(item.itemId, "title")}
-                        disabled={isSiteSettingsLoading}
-                      />
-                      <Tooltip title={t("admin.settings.campaign.removeItem") ?? ""}>
-                        <span>
-                          <IconButton
-                            color="error"
-                            onClick={() => onRemoveItem(item.itemId)}
-                            disabled={isSiteSettingsLoading}
-                          >
-                            <DeleteOutlineIcon />
-                          </IconButton>
-                        </span>
-                      </Tooltip>
+                      <Skeleton variant="rounded" height={40} width="100%" />
+                      <Skeleton variant="circular" width={36} height={36} />
                     </Box>
-
-                    <TextField
-                      fullWidth
-                      multiline
-                      minRows={3}
-                      label={t("admin.settings.campaign.messageLabel")}
-                      value={item.message}
-                      onChange={onItemChange(item.itemId, "message")}
-                      disabled={isSiteSettingsLoading}
-                    />
-
+                    <Skeleton variant="rounded" height={84} width="100%" />
                     <Grid container spacing={2}>
                       <Grid size={{ xs: 12, md: 6 }}>
-                        <TextField
-                          fullWidth
-                          label={t("admin.settings.campaign.ctaLabel")}
-                          value={item.ctaLabel ?? ""}
-                          onChange={onItemChange(item.itemId, "ctaLabel")}
-                          disabled={isSiteSettingsLoading}
-                        />
+                        <Skeleton variant="rounded" height={40} width="100%" />
                       </Grid>
                       <Grid size={{ xs: 12, md: 6 }}>
-                        <TextField
-                          fullWidth
-                          label={t("admin.settings.campaign.ctaUrl")}
-                          value={item.ctaUrl ?? ""}
-                          onChange={onItemChange(item.itemId, "ctaUrl")}
-                          disabled={isSiteSettingsLoading}
-                        />
+                        <Skeleton variant="rounded" height={40} width="100%" />
                       </Grid>
                     </Grid>
                   </Stack>
                 </Paper>
-              ))
-            ) : (
-              <Box className={styles.campaignSection__emptyState}>
-                <Typography variant="subtitle1">{t("admin.settings.campaign.empty")}</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {t("admin.settings.campaign.emptyHelper")}
-                </Typography>
-              </Box>
-            )}
-          </Box>
+              ))}
+            </Box>
 
-          <Stack spacing={2}>
-            <TextField
-              select
-              fullWidth
-              label={t("admin.settings.campaign.visibilityMode")}
-              value={campaignPopup.visibility.mode}
-              onChange={(event) =>
-                onVisibilityModeChange(event as unknown as SelectChangeEvent<VisibilityMode>)
-              }
-              disabled={isSiteSettingsLoading}
-            >
-              <MenuItem value="always">{t("admin.settings.campaign.visibility.always")}</MenuItem>
-              <MenuItem value="segments">{t("admin.settings.campaign.visibility.segments")}</MenuItem>
-              <MenuItem value="schedule">{t("admin.settings.campaign.visibility.schedule")}</MenuItem>
-            </TextField>
-
-            {campaignPopup.visibility.mode === "segments" && (
-              <TextField
-                fullWidth
-                label={t("admin.settings.campaign.segmentsLabel")}
-                value={formatSegments(campaignPopup.visibility.segments)}
-                placeholder={t("admin.settings.campaign.segmentsPlaceholder")}
-                onChange={onVisibilitySegmentsChange}
-                disabled={isSiteSettingsLoading}
-              />
-            )}
-
-            {campaignPopup.visibility.mode === "schedule" && (
-              <Grid container spacing={2}>
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <DateTimePicker
-                    label={t("admin.settings.campaign.startLabel")}
-                    value={toDateInputValue(campaignPopup.visibility.startAt)}
-                    onChange={onScheduleChange("startAt")}
-                    slotProps={{
-                      textField: {
-                        fullWidth: true,
-                        disabled: isSiteSettingsLoading,
-                      },
-                    }}
-                  />
-                </Grid>
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <DateTimePicker
-                    label={t("admin.settings.campaign.endLabel")}
-                    value={toDateInputValue(campaignPopup.visibility.endAt)}
-                    onChange={onScheduleChange("endAt")}
-                    slotProps={{
-                      textField: {
-                        fullWidth: true,
-                        disabled: isSiteSettingsLoading,
-                      },
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            )}
+            <Stack spacing={2}>
+              <Skeleton variant="rounded" height={40} width="100%" />
+              <Skeleton variant="rounded" height={40} width="100%" />
+            </Stack>
           </Stack>
-        </Stack>
+        ) : (
+          <Stack spacing={3}>
+            <Box className={styles.campaignSection__toolbar}>
+              <Button
+                variant="outlined"
+                startIcon={<AddCircleOutlineIcon />}
+                onClick={onAddItem}
+                disabled={isSiteSettingsLoading}
+              >
+                {t("admin.settings.campaign.addItem")}
+              </Button>
+              <Tooltip title={t("admin.settings.campaign.helper") ?? ""} placement="top" arrow>
+                <IconButton size="small" aria-label={t("admin.settings.campaign.helper")}>
+                  <InfoOutlinedIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </Box>
+
+            <Box className={styles.campaignSection__list}>
+              {hasCampaignItems ? (
+                campaignItems.map((item) => (
+                  <Paper key={item.itemId} className={styles.campaignSection__itemCard} elevation={0}>
+                    <Stack spacing={2}>
+                      <Box className={styles.campaignSection__itemHeader}>
+                        <TextField
+                          fullWidth
+                          label={t("admin.settings.campaign.titleLabel")}
+                          value={item.title}
+                          onChange={onItemChange(item.itemId, "title")}
+                          disabled={isSiteSettingsLoading}
+                        />
+                        <Tooltip title={t("admin.settings.campaign.removeItem") ?? ""}>
+                          <span>
+                            <IconButton
+                              color="error"
+                              onClick={() => onRemoveItem(item.itemId)}
+                              disabled={isSiteSettingsLoading}
+                            >
+                              <DeleteOutlineIcon />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
+                      </Box>
+
+                      <TextField
+                        fullWidth
+                        multiline
+                        minRows={3}
+                        label={t("admin.settings.campaign.messageLabel")}
+                        value={item.message}
+                        onChange={onItemChange(item.itemId, "message")}
+                        disabled={isSiteSettingsLoading}
+                      />
+
+                      <Grid container spacing={2}>
+                        <Grid size={{ xs: 12, md: 6 }}>
+                          <TextField
+                            fullWidth
+                            label={t("admin.settings.campaign.ctaLabel")}
+                            value={item.ctaLabel ?? ""}
+                            onChange={onItemChange(item.itemId, "ctaLabel")}
+                            disabled={isSiteSettingsLoading}
+                          />
+                        </Grid>
+                        <Grid size={{ xs: 12, md: 6 }}>
+                          <TextField
+                            fullWidth
+                            label={t("admin.settings.campaign.ctaUrl")}
+                            value={item.ctaUrl ?? ""}
+                            onChange={onItemChange(item.itemId, "ctaUrl")}
+                            disabled={isSiteSettingsLoading}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Stack>
+                  </Paper>
+                ))
+              ) : (
+                <Box className={styles.campaignSection__emptyState}>
+                  <Typography variant="subtitle1">{t("admin.settings.campaign.empty")}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {t("admin.settings.campaign.emptyHelper")}
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+
+            <Stack spacing={2}>
+              <TextField
+                select
+                fullWidth
+                label={t("admin.settings.campaign.visibilityMode")}
+                value={campaignPopup.visibility.mode}
+                onChange={(event) =>
+                  onVisibilityModeChange(event as unknown as SelectChangeEvent<VisibilityMode>)
+                }
+                disabled={isSiteSettingsLoading}
+              >
+                <MenuItem value="always">{t("admin.settings.campaign.visibility.always")}</MenuItem>
+                <MenuItem value="segments">{t("admin.settings.campaign.visibility.segments")}</MenuItem>
+                <MenuItem value="schedule">{t("admin.settings.campaign.visibility.schedule")}</MenuItem>
+              </TextField>
+
+              {campaignPopup.visibility.mode === "segments" && (
+                <TextField
+                  fullWidth
+                  label={t("admin.settings.campaign.segmentsLabel")}
+                  value={formatSegments(campaignPopup.visibility.segments)}
+                  placeholder={t("admin.settings.campaign.segmentsPlaceholder")}
+                  onChange={onVisibilitySegmentsChange}
+                  disabled={isSiteSettingsLoading}
+                />
+              )}
+
+              {campaignPopup.visibility.mode === "schedule" && (
+                <Grid container spacing={2}>
+                  <Grid size={{ xs: 12, md: 6 }}>
+                    <DateTimePicker
+                      label={t("admin.settings.campaign.startLabel")}
+                      value={toDateInputValue(campaignPopup.visibility.startAt)}
+                      onChange={onScheduleChange("startAt")}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          disabled: isSiteSettingsLoading,
+                        },
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, md: 6 }}>
+                    <DateTimePicker
+                      label={t("admin.settings.campaign.endLabel")}
+                      value={toDateInputValue(campaignPopup.visibility.endAt)}
+                      onChange={onScheduleChange("endAt")}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          disabled: isSiteSettingsLoading,
+                        },
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+              )}
+            </Stack>
+          </Stack>
+        )}
       </CardContent>
         <CardActions className={styles.campaignSection__actions}>
-          <Button variant="contained" onClick={onSave} disabled={isSiteSettingsLoading || isSettingsBusy}>
-            {t("admin.settings.campaign.save")}
-          </Button>
+          {isSiteSettingsLoading ? (
+            <Skeleton variant="rounded" height={36} width={140} />
+          ) : (
+            <Button variant="contained" onClick={onSave} disabled={isSiteSettingsLoading || isSettingsBusy}>
+              {t("admin.settings.campaign.save")}
+            </Button>
+          )}
         </CardActions>
       </Card>
     </LocalizationProvider>

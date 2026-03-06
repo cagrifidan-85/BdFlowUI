@@ -3,17 +3,12 @@ const SiteSettings = require('../models/SiteSettings');
 
 const router = express.Router();
 
-const ensureSettingsDocument = async () => {
-  let doc = await SiteSettings.findOne();
-  if (!doc) {
-    doc = await SiteSettings.create({});
-  }
-  return doc;
-};
-
 router.get('/site', async (req, res) => {
   try {
-    const doc = await ensureSettingsDocument();
+    const doc = await SiteSettings.findOne();
+    if (!doc) {
+      return res.json({});
+    }
     res.json(doc);
   } catch (error) {
     console.error('Error fetching site settings', error);

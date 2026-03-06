@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material"
 import styles from "./style.module.scss"
 import { useTranslation } from 'react-i18next';
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { PageTypes } from "../ContentArea";
 import logo from '../../../images/navigationLogo.jpg'
 
@@ -22,7 +22,13 @@ const SideBar = ({ onNavigate }: SideBarProps) => {
     return (
         <Box className={styles.sideBar}>
             <Box className={styles.sideBar__brand}>
-                <img className={styles.sideBar__logo} src={logo} alt="BdFlow admin" loading="lazy" />
+                <Link
+                    to="/"
+                    className={styles.sideBar__logoLink}
+                    aria-label={t('admin.panel.mainPage') ?? 'Go to main page'}
+                >
+                    <img className={styles.sideBar__logo} src={logo} alt="BdFlow admin" loading="lazy" />
+                </Link>
                 <Typography component="h2" className={styles.sideBar__title}>
                     {t('admin.panel.header')}
                 </Typography>

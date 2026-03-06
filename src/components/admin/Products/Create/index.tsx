@@ -48,6 +48,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
     })
 
     const priceAmount = watch('price.amount');
+    const isCurrencyDisabled = !priceAmount;
 
     useEffect(() => {
         if (!priceAmount || priceAmount === 0 || priceAmount < 0) {
@@ -165,8 +166,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                             <Controller
                                                 name="price.currency"
                                                 control={control}
-                                                disabled={!watch('price.amount')}
-                                                rules={watch('price.amount') ? {
+                                                rules={!isCurrencyDisabled ? {
                                                     required: t('admin.products.edit.currencyRequired')
                                                 }
                                                     : undefined
@@ -177,6 +177,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                                         fullWidth
                                                         select
                                                         label="Para Birimi"
+                                                        disabled={isCurrencyDisabled}
                                                         error={!!errors.price?.currency}
                                                         helperText={errors.price?.currency?.message}
                                                     >

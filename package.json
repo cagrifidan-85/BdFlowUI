@@ -9,6 +9,7 @@
     "@mui/material": "^7.3.6",
     "@mui/x-date-pickers": "^7.29.4",
     "@reduxjs/toolkit": "^2.11.2",
+    "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
     "@testing-library/user-event": "^14.6.1",
@@ -31,7 +32,7 @@
     "react-material-ui-carousel": "^3.4.2",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.12.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "scss": "^0.2.4",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
     "web-vitals": "^5.1.0"
@@ -61,7 +62,7 @@
     ]
   },
   "devDependencies": {
-    "@craco/craco": "^7.1.0",
+    "@craco/craco": "^5.9.0",
     "msw": "^2.7.0",
     "sass": "^1.79.3",
     "typescript": "~5.6.0"
