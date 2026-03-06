@@ -16,7 +16,6 @@ export const Main = () => {
     localStorage.setItem("currentLang", 'tr');
   }, [])
 
-
   const handleChangeLang = (lang: string | null) => {
     if (lang) {
       localStorage.setItem("currentLang", lang);

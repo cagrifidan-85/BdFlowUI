@@ -86,7 +86,6 @@
     margin-bottom: 2.5rem;
     padding: 2.25rem;
     border-radius: 25px !important;
-    min-height: clamp(320px, 42vh, 420px);
     background:
       radial-gradient(circle at 10% 20%, rgba(39, 108, 255, 0.45), transparent 60%),
       radial-gradient(circle at 85% 10%, rgba(0, 209, 255, 0.35), transparent 45%),
@@ -234,7 +233,6 @@
     background: linear-gradient(135deg, rgba(5, 9, 20, 0.88), rgba(9, 24, 55, 0.95));
     border: 1px solid rgba(74, 127, 255, 0.35);
     box-shadow: 0 35px 60px rgba(5, 12, 32, 0.55);
-    min-height: clamp(320px, 42vh, 420px);
   }
 
   &__newsHeader {
@@ -267,7 +265,6 @@
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
-    height: clamp(260px, 34vh, 320px);
     overflow-y: auto;
     padding-right: 0.75rem;
     margin-right: -0.75rem;

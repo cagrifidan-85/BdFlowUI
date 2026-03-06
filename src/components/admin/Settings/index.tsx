@@ -2,7 +2,7 @@ import { ImageItem, useDeleteImageMutation, useGetImagesByContainsQuery } from "
 import { UpdateSiteSettingsRequest, useGetSiteSettingsQuery, useUpdateSiteSettingsMutation } from "@apis/siteSettings";
 import { ResultModal } from "@components/common/ResultModal";
 import { useGetResultContext } from "@components/common/ResultModal/useGetResultContext";
-import { Box, Chip, Typography } from "@mui/material";
+import { Box, Chip, CircularProgress, Typography } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useTranslation } from "react-i18next";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
@@ -78,9 +78,13 @@ const Settings = () => {
             : `campaign-${Date.now()}`;
 
     const normalizeCampaignItems = (
-        items?: CampaignContentItem[],
+        items?: CampaignContentItem[] | null,
         legacySource?: Partial<CampaignPopup>
     ): CampaignContentItem[] => {
+        if (Array.isArray(items) && items.length === 0) {
+            return [];
+        }
+
         const ensured = (items ?? []).map((item) => ({
             itemId: item.itemId || generateCampaignItemId(),
             title: item.title ?? "",
@@ -314,8 +318,19 @@ const Settings = () => {
     };
 
     const handleCampaignSave = () => {
+        const hasItems = (campaignPopup.items ?? []).length > 0;
+        const campaignPayload: CampaignPopup = hasItems
+            ? campaignPopup
+            : {
+                  ...campaignPopup,
+                  title: "",
+                  message: "",
+                  ctaLabel: "",
+                  ctaUrl: "",
+              };
+
         void persistSettings(
-            { campaignPopup },
+            { campaignPopup: campaignPayload },
             "admin.settings.campaign.success",
             "admin.settings.campaign.error"
         );
@@ -413,6 +428,11 @@ const Settings = () => {
 
     return (
         <Box className={styles.settings}>
+            {isSiteSettingsLoading && (
+                <Box className={styles.settings__loadingOverlay}>
+                    <CircularProgress size={48} />
+                </Box>
+            )}
             <Box className={styles.settings__hero}>
                 <Box>
                     <Typography variant="h4" className={styles.settings__heroTitle}>

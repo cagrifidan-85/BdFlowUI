@@ -6,7 +6,7 @@ import img2 from "../../../sliderContent/2.jpg";
 import img3 from "../../../sliderContent/3.jpg";
 import styles from "./style.module.scss";
 import CalculateProduct from "./calculateProduct";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { t } from "i18next";
 import { useGetAllProductsQuery, useGetFiltersQuery } from "@apis/products";
 import { useGetImagesByContainsQuery } from "@apis/images";
@@ -77,7 +77,6 @@ export const Body = () => {
   const [selectedMaterial, setSelectedMaterial] = useState<string | undefined>()
   const [selectedEnvironment, setSelectedEnvironment] = useState<string | undefined>()
   const [selectedProduct, setSelectedProduct] = useState<string>("")
-  const [scrollPosition, setScrollPosition] = useState(500)
   const [showSelection, setShowSelection] = useState(false)
   const [campaignDismissed, setCampaignDismissed] = useState(false)
   const [newsSectionDismissed, setNewsSectionDismissed] = useState(false)
@@ -103,19 +102,7 @@ export const Body = () => {
       .filter((item) => Boolean(item.title?.trim() || item.message?.trim() || item.ctaLabel?.trim() || item.ctaUrl?.trim()))
   }, [campaignPopup])
 
-  const fallbackCampaignItems: CampaignContentItem[] = campaignPopup
-    ? [
-        {
-          itemId: "campaign-default",
-          title: campaignPopup.title?.trim() || t('body.campaign.defaultTitle'),
-          message: campaignPopup.message?.trim() || t('body.campaign.defaultMessage'),
-          ctaLabel: campaignPopup.ctaLabel ?? "",
-          ctaUrl: campaignPopup.ctaUrl ?? "",
-        },
-      ]
-    : []
-
-  const campaignItemsToRender = normalizedCampaignItems.length ? normalizedCampaignItems : fallbackCampaignItems
+  const campaignItemsToRender = normalizedCampaignItems
   const hasCampaignItems = campaignItemsToRender.length > 0
 
   const remoteSliderItems = (sliderData?.images ?? []).map((image) => ({ id: image.id, img: image.url }))
@@ -154,14 +141,6 @@ export const Body = () => {
   const handleDismissNewsSection = () => {
     setNewsSectionDismissed(true)
   }
-
-  useEffect(() => {
-    if (scrollPosition > 0) {
-      setTimeout(() => window.scrollTo(0, scrollPosition), 5);
-
-      setScrollPosition(0);
-    }
-  }, [scrollPosition]);
 
   if (isLoading || isFiltersLoading) {
     return <Box className={styles.products} display="flex" justifyContent="center" alignItems="center" minHeight="400px">

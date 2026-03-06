@@ -6,6 +6,7 @@ import { baseApi } from "./apis";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainPage from "@pages/MainPage";
 import AdminPage from "@pages/AdminPage";
+import ScrollToTop from "@components/common/ScrollToTop";
 
 
 const root = ReactDOM.createRoot(
@@ -16,6 +17,7 @@ root.render(
   <React.StrictMode>
     <ApiProvider api={baseApi}>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/admin" element={<AdminPage />} />

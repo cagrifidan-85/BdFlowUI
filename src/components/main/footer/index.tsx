@@ -16,11 +16,31 @@ const Footer = () => {
     pollingInterval: 300000,
   });
   const currentYear = new Date().getFullYear();
-  const contact = siteSettings?.contact ?? {
+  const fallbackContact = {
     email: t('footer.contact.email'),
     phone: t('footer.contact.phone'),
     address: t('footer.contact.address'),
+    facebookUrl: '',
+    twitterUrl: '',
+    instagramUrl: '',
+    linkedinUrl: '',
   };
+  const contact = {
+    ...fallbackContact,
+    ...(siteSettings?.contact ?? {}),
+  };
+  const normalizeUrl = (value: string) => {
+    const trimmed = value.trim();
+    if (!trimmed) return '';
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+    return `https://${trimmed}`;
+  };
+  const socialLinks = [
+    { key: 'facebook', url: normalizeUrl(contact.facebookUrl ?? ''), icon: <FacebookIcon /> },
+    { key: 'twitter', url: normalizeUrl(contact.twitterUrl ?? ''), icon: <TwitterIcon /> },
+    { key: 'instagram', url: normalizeUrl(contact.instagramUrl ?? ''), icon: <InstagramIcon /> },
+    { key: 'linkedin', url: normalizeUrl(contact.linkedinUrl ?? ''), icon: <LinkedInIcon /> },
+  ].filter((item) => Boolean(item.url));
   return (
     <Box component="footer" className={styles.footer}>
       <Box className={styles.footer__row}>
@@ -45,15 +65,28 @@ const Footer = () => {
           </Box>
         </Box>
 
-        <Box className={styles.footer__rowColSocial}>
-          <Typography variant="subtitle1" fontWeight={600} className={styles.footer__rowColSocialTitle}>{t('footer.social.title')}</Typography>
-          <Box className={styles.footer__rowColSocialIcons}>
-            <IconButton color="primary" size="small" href="#" className={styles.footer__rowColSocialIcon}><FacebookIcon /></IconButton>
-            <IconButton color="primary" size="small" href="#" className={styles.footer__rowColSocialIcon}><TwitterIcon /></IconButton>
-            <IconButton color="primary" size="small" href="#" className={styles.footer__rowColSocialIcon}><InstagramIcon /></IconButton>
-            <IconButton color="primary" size="small" href="#" className={styles.footer__rowColSocialIcon}><LinkedInIcon /></IconButton>
+        {socialLinks.length > 0 && (
+          <Box className={styles.footer__rowColSocial}>
+            <Typography variant="subtitle1" fontWeight={600} className={styles.footer__rowColSocialTitle}>{t('footer.social.title')}</Typography>
+            <Box className={styles.footer__rowColSocialIcons}>
+              {socialLinks.map((item) => (
+                <IconButton
+                  key={item.key}
+                  color="primary"
+                  size="small"
+                  href={item.url}
+                  component="a"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.footer__rowColSocialIcon}
+                  aria-label={item.key}
+                >
+                  {item.icon}
+                </IconButton>
+              ))}
+            </Box>
           </Box>
-        </Box>
+        )}
 
         <Box className={styles.footer__rowColRight}>
           <Typography variant="subtitle1" fontWeight={600} className={styles.footer__rowColRightTitle}>{t('footer.contact.title')}</Typography>

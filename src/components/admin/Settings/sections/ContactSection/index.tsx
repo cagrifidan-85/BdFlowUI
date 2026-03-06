@@ -13,6 +13,10 @@ import {
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import PhoneIcon from "@mui/icons-material/Phone";
 import PlaceIcon from "@mui/icons-material/Place";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { ContactContent } from "@app-types/siteSettings";
 import styles from "./style.module.scss";
 
@@ -88,6 +92,70 @@ const ContactSection: FC<ContactSectionProps> = ({
                 startAdornment: (
                   <InputAdornment position="start">
                     <PlaceIcon fontSize="small" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <TextField
+              fullWidth
+              label={t("admin.settings.contact.facebookLabel")}
+              value={contactInfo.facebookUrl}
+              onChange={onContactChange("facebookUrl")}
+              disabled={isSiteSettingsLoading}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FacebookIcon fontSize="small" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <TextField
+              fullWidth
+              label={t("admin.settings.contact.instagramLabel")}
+              value={contactInfo.instagramUrl}
+              onChange={onContactChange("instagramUrl")}
+              disabled={isSiteSettingsLoading}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <InstagramIcon fontSize="small" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <TextField
+              fullWidth
+              label={t("admin.settings.contact.twitterLabel")}
+              value={contactInfo.twitterUrl}
+              onChange={onContactChange("twitterUrl")}
+              disabled={isSiteSettingsLoading}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <TwitterIcon fontSize="small" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <TextField
+              fullWidth
+              label={t("admin.settings.contact.linkedinLabel")}
+              value={contactInfo.linkedinUrl}
+              onChange={onContactChange("linkedinUrl")}
+              disabled={isSiteSettingsLoading}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LinkedInIcon fontSize="small" />
                   </InputAdornment>
                 ),
               }}

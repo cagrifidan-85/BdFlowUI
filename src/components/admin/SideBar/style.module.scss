@@ -22,6 +22,14 @@
         border-bottom: 1px solid rgba(119, 167, 255, 0.25);
     }
 
+    &__logoLink {
+        display: inline-block;
+        width: 100%;
+        max-width: 160px;
+        text-decoration: none;
+        line-height: 0;
+    }
+
     &__logo {
         width: 100%;
         max-width: 160px;
