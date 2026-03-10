@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/images', require('./routes/images'));
 app.use('/api/settings', require('./routes/settings'));
+app.use('/api/price-requests', require('./routes/priceRequests'));
 
 // Health check
 app.get('/api/health', (req, res) => {

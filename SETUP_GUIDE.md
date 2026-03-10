@@ -41,6 +41,15 @@ CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 PORT=5000
+
+# Price request mailer (SMTP)
+PRICE_REQUEST_MAIL_HOST=smtp.office365.com
+PRICE_REQUEST_MAIL_PORT=587
+PRICE_REQUEST_MAIL_USER=notifications@yourdomain.com
+PRICE_REQUEST_MAIL_PASS=your_smtp_password
+PRICE_REQUEST_MAIL_TO=admin@yourdomain.com
+# Optional: override default sender
+# PRICE_REQUEST_MAIL_FROM=bdflow@yourdomain.com
 ```
 
 ### 2. MongoDB Atlas Hesabı Oluştur

@@ -25,7 +25,7 @@ export interface ProductType {
   image: string;
   measurementRange: string;
   description: string;
-  price: { amount: number; currency: string };
+  price?: { amount: number; currency: string };
   bestSeller?: boolean;
   catalogUrl?: string;
   material?: string;

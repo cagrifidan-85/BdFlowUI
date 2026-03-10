@@ -87,7 +87,7 @@ const Products = () => {
                             <TableCell>{product.productNo}</TableCell>
                             <TableCell>{product.name}</TableCell>
                             <TableCell>{product.category ? filters?.categories?.filter((category: FilterBaseModel) => category.code === product.category)[0]?.[lang as 'tr' | 'en'] ?? '' : ''}</TableCell>
-                            <TableCell><CurrencyInput value={product.price.amount} disabled suffix={product.price.currency} /></TableCell>
+                            <TableCell><CurrencyInput value={product?.price?.amount} disabled suffix={product?.price?.currency} /></TableCell>
                             <TableCell>{product.stock}</TableCell>
                             <TableCell className={styles.products__tableBodyRowActions}>
                                 <EditNoteIcon fontSize="large" sx={{ ml: 0.5 }} onClick={() => { handleEditClick(product) }} />

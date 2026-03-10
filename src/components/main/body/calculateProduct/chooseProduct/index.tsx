@@ -1,4 +1,4 @@
-import { Box, Select, IconButton, Typography, Link, FormControl, MenuItem, Alert, AlertTitle, Snackbar } from '@mui/material';
+import { Box, Select, IconButton, Typography, Link, FormControl, MenuItem, Alert, Snackbar } from '@mui/material';
 import React from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import styles from './style.module.scss';
@@ -6,6 +6,10 @@ import styles from './style.module.scss';
 import ProductList from '@components/common/ProductList';
 import { useTranslation } from 'react-i18next';
 import { ProductType, ProductFiltersModel, FilterBaseModel } from '@constants/index';
+import FloatingCart from '@components/common/FloatingCart';
+import PriceRequestDialog from '@components/common/FloatingCart/PriceRequestDialog';
+import { CartItem, PriceRequestFormValues } from '@app-types/cart';
+import { useSendPriceRequestMutation } from '@apis/priceRequests';
 
 
 
@@ -23,10 +27,128 @@ interface ChooseProductProps {
 
 const ChooseProduct = ({ products, onItemSelected, onBack, material, environment, filtersData }: ChooseProductProps) => {
     const { t } = useTranslation();
-    const lang = localStorage.getItem('currentLang')
+    const lang = (localStorage.getItem('currentLang') as 'tr' | 'en') || 'tr'
     const [filters, setFilters] = React.useState<{ [key: string]: FilterBaseModel }>({});
+    const [cartItems, setCartItems] = React.useState<CartItem[]>([]);
+    const [isCartCollapsed, setIsCartCollapsed] = React.useState(false);
+    const [isPriceRequestOpen, setIsPriceRequestOpen] = React.useState(false);
+    const [feedback, setFeedback] = React.useState<{ type: 'success' | 'error'; message: string } | null>(null);
+    const [sendPriceRequest, { isLoading: isSendingRequest }] = useSendPriceRequestMutation();
+    const isCartFullyPriced = React.useMemo(
+        () => cartItems.length > 0 && cartItems.every((item) => typeof item.product.price?.amount === 'number' && item.product.price.amount >= 0),
+        [cartItems]
+    );
 
-    const [showError, setShowError] = React.useState(false);
+    const resolveProductKey = (product: ProductType) => product.id || product.productNo || product.name;
+    const resolveFilterLabel = (options?: FilterBaseModel[], code?: string) => {
+        if (!code || !options) {
+            return undefined;
+        }
+        const match = options.find((item) => item.code === code);
+        return match ? match[lang as 'tr' | 'en'] : undefined;
+    };
+
+    React.useEffect(() => {
+        if (!cartItems.length) {
+            setIsPriceRequestOpen(false);
+        }
+    }, [cartItems.length]);
+
+    const showSnackbar = (type: 'success' | 'error', message: string) => {
+        setFeedback({ type, message });
+    };
+
+    const handleAddToCart = (product: ProductType) => {
+        const productKey = resolveProductKey(product);
+        const materialLabelFromProduct = resolveFilterLabel(filtersData?.materials, product.material);
+        const environmentLabelFromProduct = resolveFilterLabel(filtersData?.environments, product.environment);
+
+        setCartItems((prev) => {
+            const existing = prev.find((item) => item.key === productKey);
+            if (existing) {
+                return prev.map((item) =>
+                    item.key === productKey
+                        ? {
+                            ...item,
+                            quantity: item.quantity + 1,
+                            materialLabel: item.materialLabel || materialLabelFromProduct,
+                            environmentLabel: item.environmentLabel || environmentLabelFromProduct,
+                        }
+                        : item
+                );
+            }
+
+            return [...prev, {
+                product,
+                quantity: 1,
+                key: productKey,
+                materialLabel: materialLabelFromProduct,
+                environmentLabel: environmentLabelFromProduct,
+            }];
+        });
+
+        setIsCartCollapsed(false);
+        showSnackbar('success', t('cart.messages.added', { product: product.name }));
+    };
+
+    const handleIncrement = (itemKey: string) => {
+        setCartItems((prev) =>
+            prev.map((item) =>
+                item.key === itemKey ? { ...item, quantity: item.quantity + 1 } : item
+            )
+        );
+    };
+
+    const handleDecrement = (itemKey: string) => {
+        setCartItems((prev) =>
+            prev.map((item) =>
+                item.key === itemKey && item.quantity > 1
+                    ? { ...item, quantity: item.quantity - 1 }
+                    : item
+            )
+        );
+    };
+
+    const handleRemove = (itemKey: string) => {
+        setCartItems((prev) => prev.filter((item) => item.key !== itemKey));
+        showSnackbar('success', t('cart.messages.removed'));
+    };
+
+    const handleClearCart = () => {
+        setCartItems([]);
+        showSnackbar('success', t('cart.messages.cleared'));
+    };
+
+    const handleSubmitPriceRequest = async (values: PriceRequestFormValues) => {
+        try {
+            await sendPriceRequest({
+                ...values,
+                items: cartItems.map((item) => ({
+                    productId: item.product.id || item.product.productNo || item.key,
+                    productNo: item.product.productNo,
+                    name: item.product.name,
+                    quantity: item.quantity,
+                    price: item.product.price,
+                    materialLabel: item.materialLabel,
+                    environmentLabel: item.environmentLabel,
+                })),
+            }).unwrap();
+
+            setIsPriceRequestOpen(false);
+            setCartItems([]);
+            showSnackbar('success', t('cart.messages.sent'));
+        } catch (error) {
+            showSnackbar('error', t('cart.messages.sendFailed'));
+        }
+    };
+
+    const handleOpenPriceRequest = () => {
+        if (!cartItems.length) {
+            showSnackbar('error', t('cart.messages.cartEmpty'));
+            return;
+        }
+        setIsPriceRequestOpen(true);
+    };
 
     const filterLabels: { [key: string]: string } = {
         'sensors': 'Sensör Tipi',
@@ -85,14 +207,12 @@ const ChooseProduct = ({ products, onItemSelected, onBack, material, environment
     // Filtreleme mantığı
     const filteredProducts = React.useMemo(() => {
         return products && products.filter(product => {
-            // Eğer hiç filter seçilmemişse tüm ürünleri göster
             if (Object.keys(filters).length === 0) {
                 return true;
             }
-            
-            // Seçilen tüm filtrelere uygun ürünleri bul
+
             return Object.entries(filters).every(([filterKey, filterValue]) => {
-                switch(filterKey) {
+                switch (filterKey) {
                     case 'sensors':
                         return product.sensor === filterValue.code;
                     case 'connectionTypes':
@@ -111,6 +231,24 @@ const ChooseProduct = ({ products, onItemSelected, onBack, material, environment
             });
         })
     }, [filters, products]);
+
+    const hasMaterialFilter = Object.prototype.hasOwnProperty.call(filters, 'materials');
+    const hasEnvironmentFilter = Object.prototype.hasOwnProperty.call(filters, 'environments');
+
+    const shouldLockMaterial = Boolean(material && !hasMaterialFilter);
+    const shouldLockEnvironment = Boolean(environment && !hasEnvironmentFilter);
+
+    const productsToRender = React.useMemo(() => {
+        if (!filteredProducts) {
+            return [] as ProductType[];
+        }
+
+        return filteredProducts.filter((product) => {
+            const materialMatch = shouldLockMaterial ? product.material === material : true;
+            const environmentMatch = shouldLockEnvironment ? product.environment === environment : true;
+            return materialMatch && environmentMatch;
+        });
+    }, [filteredProducts, shouldLockMaterial, shouldLockEnvironment, material, environment]);
 
     return (
         <Box className={styles.chooseProduct}>
@@ -175,24 +313,53 @@ const ChooseProduct = ({ products, onItemSelected, onBack, material, environment
             </Box>
 
             {filteredProducts && (
-                <ProductList
-                    filters={filtersData}
-                    products={filteredProducts.filter(item =>
-                        item.material === material && item.environment === environment
+                <>
+                    <ProductList
+                        filters={filtersData}
+                        products={productsToRender}
+                        onAddToCart={handleAddToCart}
+                    />
+
+                    {cartItems.length > 0 && (
+                        <>
+                            <FloatingCart
+                                items={cartItems}
+                                isCollapsed={isCartCollapsed}
+                                onToggle={() => setIsCartCollapsed((prev) => !prev)}
+                                onIncrement={handleIncrement}
+                                onDecrement={handleDecrement}
+                                onRemove={handleRemove}
+                                onClear={handleClearCart}
+                                onRequest={handleOpenPriceRequest}
+                                isSendingRequest={isSendingRequest}
+                                isFullyPriced={isCartFullyPriced}
+                            />
+                            <PriceRequestDialog
+                                open={isPriceRequestOpen}
+                                onClose={() => setIsPriceRequestOpen(false)}
+                                items={cartItems}
+                                onSubmit={handleSubmitPriceRequest}
+                                isSubmitting={isSendingRequest}
+                                isOrderMode={isCartFullyPriced}
+                            />
+                        </>
                     )}
-                />
+                </>
             )}
 
             <Snackbar
-                open={showError}
-                autoHideDuration={3000}
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                onClose={() => setShowError(false)}
+                open={Boolean(feedback)}
+                autoHideDuration={3500}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                onClose={() => setFeedback(null)}
             >
-                <Alert severity="error" onClose={() => setShowError(false)}>
-                    <AlertTitle>{t('admin.products.create.errorTitle')}</AlertTitle>
-                    {t('admin.products.create.errorMessage')}
-                </Alert>
+                {feedback
+                    ? (
+                        <Alert severity={feedback.type} onClose={() => setFeedback(null)}>
+                            {feedback.message}
+                        </Alert>
+                    )
+                    : undefined}
             </Snackbar>
         </Box>
     )
