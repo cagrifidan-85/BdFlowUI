@@ -1,0 +1,123 @@
+.cart {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 360px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.22);
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+
+  @media (max-width: 768px) {
+    width: calc(100% - 32px);
+    right: 16px;
+    bottom: 16px;
+  }
+}
+
+.cartCollapsed {
+  padding-bottom: 12px;
+}
+
+.cart__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cart__headerTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cart__headerActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cart__selectionMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cart__items {
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 6px;
+}
+
+.cart__item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.cart__item:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.cart__itemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cart__itemActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cart__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cart__empty {
+  padding: 12px 0;
+  text-align: center;
+  color: #64748b;
+}
+
+.cartDialog__summary {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cartDialog__list {
+  margin-top: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cartDialog__listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}

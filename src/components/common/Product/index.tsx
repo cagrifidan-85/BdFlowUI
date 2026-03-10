@@ -1,4 +1,4 @@
-import { Box, Typography, Button, Card, CardContent, CardMedia, Chip } from '@mui/material'
+import { Box, Typography, Button, Card, CardContent, CardMedia, Chip, Tooltip } from '@mui/material'
 import React from 'react'
 import styles from './style.module.scss'
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,7 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 interface ProductCardProps {
   product: ProductType
   filtersData?:ProductFiltersModel
-  onAddToCart?: () => void;
+  onAddToCart?: (product: ProductType) => void;
   onDetails?: (product: ProductType) => void;
 }
 
@@ -44,9 +44,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
       />
         <CardContent className={styles.product__content}>
         {/* Başlık */}
-          <Typography variant="h6" className={styles.product__contentName}>
-          {product.name}
-        </Typography>
+          <Tooltip title={product.name} placement="top" arrow>
+            <Typography variant="h6" className={styles.product__contentName}>
+              {product.name}
+            </Typography>
+          </Tooltip>
 
         {/* Kategori Chip */}
         {categoryLabel && (
@@ -133,7 +135,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             variant="contained" 
             color="success" 
             size="small"
-            onClick={onAddToCart}
+            onClick={() => onAddToCart && onAddToCart(product)}
             disabled={(product.stock ?? 0) === 0}
             className={styles.btnTight}
             style={{ flex: 1 }}

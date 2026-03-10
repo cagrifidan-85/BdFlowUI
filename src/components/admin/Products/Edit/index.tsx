@@ -54,7 +54,7 @@ const ProductEdit = ({ filters, product, open, onClose }: ProductEditProps) => {
             const payload: ProductType = {
                 ...data,
                 id: product?.id,
-                price: { amount: data.price.amount, currency: data.price.currency },
+                price: { amount: data?.price?.amount, currency: data?.price?.currency },
                 image: imageUpload.url || data.image,
                 catalogUrl: catalogUpload.url || data.catalogUrl,
             } as ProductType;

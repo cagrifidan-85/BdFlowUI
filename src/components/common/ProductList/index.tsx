@@ -12,18 +12,17 @@ type SortKey = 'price' | 'name' | 'bestSeller';
 interface ProductListProps {
     products: ProductType[]
     filters?:ProductFiltersModel 
-    onAddToCart?: () => void
-    onDetails?: () => void
+    onAddToCart?: (product: ProductType) => void
 }
 
-const ProductList: React.FC<ProductListProps> = ({ products, filters }) => {
+const ProductList: React.FC<ProductListProps> = ({ products, filters, onAddToCart }) => {
     const { t } = useTranslation();
     const [sortKey, setSortKey] = useState<SortKey>('name');
     const [selectedProduct, setSelectedProduct] = useState<ProductType | undefined>(undefined);
 
     const [isOpenDetailModal, setIsOpenDetailModal] = useState<boolean>(false);
     const sortedProducts = [...products].sort((a, b) => {
-        if (sortKey === 'price') return a.price.amount - b.price.amount;
+        if (sortKey === 'price') return (a?.price?.amount ?? 0) - (b?.price?.amount ?? 0);
         if (sortKey === 'name') return a.name.localeCompare(b.name);
         if (sortKey === 'bestSeller') return (b.bestSeller ? 1 : 0) - (a.bestSeller ? 1 : 0);
         return 0;
@@ -55,7 +54,13 @@ const ProductList: React.FC<ProductListProps> = ({ products, filters }) => {
             </Box>
             <Box className={styles.productList__items}>
                 {sortedProducts.length > 0 ? sortedProducts.map((product, idx) => (
-                    <ProductCard key={product.name + idx} product={product} onDetails={(data) => handleDetailClick(data)} />
+                    <ProductCard 
+                        key={product.name + idx} 
+                        product={product} 
+                        onDetails={(data) => handleDetailClick(data)} 
+                        onAddToCart={onAddToCart}
+                        filtersData={filters}
+                    />
                 )) :
                     <Box className={styles.productList__noData}>
                         <Box className={styles.productList__noDataContent}>

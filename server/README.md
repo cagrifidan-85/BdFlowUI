@@ -25,6 +25,26 @@ CLOUDINARY_API_SECRET=your_api_secret
 # Server Configuration
 PORT=5000
 NODE_ENV=development
+
+# Price Request Mailer
+PRICE_REQUEST_MAIL_HOST=smtp.office365.com
+PRICE_REQUEST_MAIL_PORT=587
+PRICE_REQUEST_MAIL_USER=notifications@yourdomain.com
+PRICE_REQUEST_MAIL_PASS=your_smtp_password
+PRICE_REQUEST_MAIL_TO=admin@yourdomain.com
+# Optional custom sender, defaults to PRICE_REQUEST_MAIL_USER
+# PRICE_REQUEST_MAIL_FROM=bdflow@yourdomain.com
+
+> The price request mailer settings are used when visitors send their quote cart via the new `/api/price-requests` endpoint. Configure these with any SMTP provider (Office365, Gmail, SendGrid, etc.).
+
+# Price Request Mailer
+PRICE_REQUEST_MAIL_HOST=smtp.office365.com
+PRICE_REQUEST_MAIL_PORT=587
+PRICE_REQUEST_MAIL_USER=notifications@yourdomain.com
+PRICE_REQUEST_MAIL_PASS=your_smtp_password
+PRICE_REQUEST_MAIL_TO=admin@yourdomain.com
+# Optional custom sender, defaults to PRICE_REQUEST_MAIL_USER
+# PRICE_REQUEST_MAIL_FROM=bdflow@yourdomain.com
 ```
 
 ### 3. MongoDB Atlas Setup
@@ -62,6 +82,9 @@ Server will run on `http://localhost:5000`
 ### Upload
 - `POST /api/images/upload` - Upload image to Cloudinary
 - `DELETE /api/images/:publicId` - Delete image from Cloudinary
+
+### Price Requests
+- `POST /api/price-requests` - Send the visitor's quote cart to the configured admin mailbox
 
 ### Health Check
 - `GET /api/health` - Server health status

@@ -24,6 +24,7 @@
     "dayjs": "^1.11.19",
     "i18next": "^25.7.3",
     "mongodb": "^7.0.0",
+    "nodemailer": "^8.0.2",
     "react": "^18.3.1",
     "react-currency-input-field": "^4.0.3",
     "react-dom": "^18.3.1",

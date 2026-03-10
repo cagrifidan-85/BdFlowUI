@@ -27,7 +27,7 @@ const ProductDetailModal = ({ open, product, filtersData, onClose }: ProductDeta
                     <p><strong>{t('type')}:</strong> {product?.category ? filtersData?.categories?.filter(category => category.code === product.category)[0]?.[lang as 'tr' | 'en'] ?? '' : ''}</p>
                     <p><strong>{t('admin.products.measurementRange')}:</strong> {product?.measurementRange}</p>
                     <p><strong>{t('description')}:</strong> {product?.description}  </p>
-                    <p><strong>{t('price')}</strong> {product?.price.amount + ' ' + product?.price.currency}</p>
+                    <p><strong>{t('price')}</strong> {product?.price ? `${product.price.amount} ${product.price.currency}` : ''}</p>
                     <p><strong>{t('admin.products.edit.materialLabel')}:</strong> {product?.material ? filtersData?.materials?.filter(material => material.code === product.material)[0]?.[lang as 'tr' | 'en'] ?? '' : ''}</p>
                     <p><strong>{t('admin.products.edit.environmentLabel')}:</strong> {product?.environment ? filtersData?.environments?.filter(environment => environment.code === product.environment)[0]?.[lang as 'tr' | 'en'] ?? '' : ''}</p>
                     <p><strong>{t('admin.products.edit.connectionTypeLabel')}:</strong> {product?.connectionType ? filtersData?.connectionTypes?.filter(connectionType => connectionType.code === product.connectionType)[0]?.[lang as 'tr' | 'en'] ?? '' : ''}</p>
