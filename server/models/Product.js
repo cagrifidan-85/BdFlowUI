@@ -12,6 +12,11 @@ const productSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    nameEn: {
+        type: String,
+        default: '',
+        trim: true
+    },
     category: {
         type: String,
         required: true
@@ -29,6 +34,10 @@ const productSchema = new mongoose.Schema({
         default: ''
     },
     description: {
+        type: String,
+        default: ''
+    },
+    descriptionEn: {
         type: String,
         default: ''
     },

@@ -103,6 +103,19 @@ const ProductEdit = ({ filters, product, open, onClose }: ProductEditProps) => {
                                     )}
                                 />
                             </Grid>
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <Controller
+                                    name="nameEn"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <TextField
+                                            {...field}
+                                            fullWidth
+                                            label={`${t('admin.products.edit.nameLabel')} (EN)`}
+                                        />
+                                    )}
+                                />
+                            </Grid>
 
                             <Grid size={{ xs: 12, sm: 6 }}>
                                 <Controller
@@ -342,6 +355,21 @@ const ProductEdit = ({ filters, product, open, onClose }: ProductEditProps) => {
                                             {...field}
                                             fullWidth
                                             label={t('admin.products.edit.descriptionLabel')}
+                                            multiline
+                                            rows={4}
+                                        />
+                                    )}
+                                />
+                            </Grid>
+                            <Grid size={12}>
+                                <Controller
+                                    name="descriptionEn"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <TextField
+                                            {...field}
+                                            fullWidth
+                                            label={`${t('admin.products.edit.descriptionLabel')} (EN)`}
                                             multiline
                                             rows={4}
                                         />

@@ -5,10 +5,12 @@ import Products from "../Products"
 import Users from "../Users"
 import Settings from "../Settings"
 import Dashboard from "../Dashboard"
+import Filters from "../Filters"
 
 export enum PageTypes {
     Dashboard = 'Dashboard',
     Products = 'Products',
+    Filters = 'Filters',
     Users = 'Users',
     Settings = 'Settings'
 }
@@ -21,6 +23,7 @@ interface ContentAreaProps {
 const renderComponents: Record<PageTypes, React.ComponentType> = {
     [PageTypes.Dashboard]: Dashboard,
     [PageTypes.Products]: Products,
+    [PageTypes.Filters]: Filters,
     [PageTypes.Users]: Users,
     [PageTypes.Settings]: Settings,
 }

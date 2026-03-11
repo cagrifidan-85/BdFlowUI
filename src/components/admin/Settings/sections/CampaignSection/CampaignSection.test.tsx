@@ -4,6 +4,7 @@ import CampaignSection from "./index";
 import { CampaignPopup } from "@app-types/siteSettings";
 
 jest.mock("react-i18next", () => ({
+  initReactI18next: { type: "3rdParty", init: () => undefined },
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 

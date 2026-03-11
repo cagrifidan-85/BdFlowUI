@@ -13,12 +13,13 @@ import { ProductEdit } from "./Edit"
 import { useGetAllProductsQuery, useGetFiltersQuery } from "@apis/products"
 
 import CreateProduct from "./Create"
+import { getActiveLanguage, getLocalizedProductText } from '../../../utils';
 
 
 const Products = () => {
 
     const { t } = useTranslation()
-    const lang = localStorage.getItem("currentLang")
+    const lang = getActiveLanguage()
     const { data: apiProducts, isLoading, isError } = useGetAllProductsQuery()
     const { data: filters, isError: isFiltersError, isLoading: isFiltersLoading } = useGetFiltersQuery()
     const [products, setProducts] = useState<ProductType[]>([])
@@ -85,7 +86,7 @@ const Products = () => {
                     {products.slice((page - 1) * maxItemsPerPage, page * maxItemsPerPage).map((product, index) => (
                         <TableRow key={index} className={styles.products__tableBodyRow}>
                             <TableCell>{product.productNo}</TableCell>
-                            <TableCell>{product.name}</TableCell>
+                            <TableCell>{getLocalizedProductText(product, 'name', lang)}</TableCell>
                             <TableCell>{product.category ? filters?.categories?.filter((category: FilterBaseModel) => category.code === product.category)[0]?.[lang as 'tr' | 'en'] ?? '' : ''}</TableCell>
                             <TableCell><CurrencyInput value={product?.price?.amount} disabled suffix={product?.price?.currency} /></TableCell>
                             <TableCell>{product.stock}</TableCell>

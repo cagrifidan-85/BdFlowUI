@@ -6,6 +6,7 @@ import styles from './style.module.scss';
 import { useTranslation } from "react-i18next";
 import ProductDetailModal from './ProductDetailModal';
 import noDataImage from '@images/noData.png';
+import { getActiveLanguage, getLocalizedProductText } from '../../../utils';
 
 type SortKey = 'price' | 'name' | 'bestSeller';
 
@@ -21,9 +22,14 @@ const ProductList: React.FC<ProductListProps> = ({ products, filters, onAddToCar
     const [selectedProduct, setSelectedProduct] = useState<ProductType | undefined>(undefined);
 
     const [isOpenDetailModal, setIsOpenDetailModal] = useState<boolean>(false);
+    const activeLanguage = getActiveLanguage();
     const sortedProducts = [...products].sort((a, b) => {
         if (sortKey === 'price') return (a?.price?.amount ?? 0) - (b?.price?.amount ?? 0);
-        if (sortKey === 'name') return a.name.localeCompare(b.name);
+        if (sortKey === 'name') {
+            const nameA = getLocalizedProductText(a, 'name', activeLanguage);
+            const nameB = getLocalizedProductText(b, 'name', activeLanguage);
+            return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
+        }
         if (sortKey === 'bestSeller') return (b.bestSeller ? 1 : 0) - (a.bestSeller ? 1 : 0);
         return 0;
     })
@@ -55,7 +61,7 @@ const ProductList: React.FC<ProductListProps> = ({ products, filters, onAddToCar
             <Box className={styles.productList__items}>
                 {sortedProducts.length > 0 ? sortedProducts.map((product, idx) => (
                     <ProductCard 
-                        key={product.name + idx} 
+                        key={(product.id ?? product.productNo ?? `${product.name}-${idx}`)} 
                         product={product} 
                         onDetails={(data) => handleDetailClick(data)} 
                         onAddToCart={onAddToCart}

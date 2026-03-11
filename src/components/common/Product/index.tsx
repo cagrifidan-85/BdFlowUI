@@ -7,6 +7,7 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import CategoryIcon from '@mui/icons-material/Category';
 import BalanceIcon from '@mui/icons-material/Balance';
 import InventoryIcon from '@mui/icons-material/Inventory';
+import { getActiveLanguage, getLocalizedProductText } from '../../../utils';
 
 
 
@@ -25,7 +26,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
 
   const { t } = useTranslation();
-  const lang = localStorage.getItem("currentLang");
+  const lang = getActiveLanguage();
+  const localizedName = getLocalizedProductText(product, 'name', lang);
   
   const categoryLabel = product.category 
     ? filtersData?.categories?.filter((category: FilterBaseModel) => category.code === product.category)[0]?.[lang as 'tr' | 'en'] ?? '' 
@@ -39,14 +41,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <CardMedia
         component="img"
         image={product.image}
-        alt={product.name}
+        alt={localizedName}
         className={styles.product__image}
       />
         <CardContent className={styles.product__content}>
         {/* Başlık */}
-          <Tooltip title={product.name} placement="top" arrow>
+          <Tooltip title={localizedName} placement="top" arrow>
             <Typography variant="h6" className={styles.product__contentName}>
-              {product.name}
+              {localizedName}
             </Typography>
           </Tooltip>
 

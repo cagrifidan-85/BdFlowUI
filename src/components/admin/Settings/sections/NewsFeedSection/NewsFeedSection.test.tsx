@@ -3,6 +3,7 @@ import NewsFeedSection from "./index";
 import { NewsFeedSettings } from "@app-types/siteSettings";
 
 jest.mock("react-i18next", () => ({
+  initReactI18next: { type: "3rdParty", init: () => undefined },
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 

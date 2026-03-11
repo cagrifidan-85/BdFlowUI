@@ -1,0 +1,99 @@
+.resultModal {
+  &__paper {
+    border-radius: 32px;
+    padding: 0;
+    box-shadow: 0 55px 120px rgba(6, 12, 28, 0.55);
+    width: min(92vw, 680px);
+    max-width: 680px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 600px) {
+    &__paper {
+      width: 540px;
+    }
+  }
+
+  @media (min-width: 900px) {
+    &__paper {
+      width: 680px;
+    }
+  }
+
+  &__backdrop {
+    background-color: rgba(4, 10, 25, 0.75) !important;
+    backdrop-filter: blur(4px);
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 32px;
+    color: #fff;
+  }
+
+  &__title--loading {
+    background: linear-gradient(120deg, #0066ff, #1a73e8);
+  }
+
+  &__title--success {
+    background: linear-gradient(120deg, #0f9d58, #34a853);
+  }
+
+  &__title--error {
+    background: linear-gradient(120deg, #d93025, #ea4335);
+  }
+
+  &__iconWrapper {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__iconSymbol {
+    font-size: 36px !important;
+  }
+
+  &__iconSpinner {
+    color: #fff !important;
+  }
+
+  &__closeButton {
+    color: #fff;
+  }
+
+  &__closeButton:disabled {
+    opacity: 0.6;
+  }
+
+  &__content {
+    padding: 28px 32px;
+    background-color: var(--result-modal-surface, #fff);
+  }
+
+  &__message {
+    margin-bottom: 12px;
+    font-size: 1rem;
+    color: var(--result-modal-message, #111827);
+  }
+
+  @media (min-width: 600px) {
+    &__message {
+      font-size: 1.05rem;
+    }
+  }
+
+  &__followUp {
+    color: var(--result-modal-subtle, #5f6472);
+  }
+
+  &__titleText {
+    font-weight: 700;
+    flex: 1;
+  }
+}

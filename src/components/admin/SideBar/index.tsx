@@ -15,6 +15,7 @@ const SideBar = ({ onNavigate }: SideBarProps) => {
     const navigationItems = [
         { label: t('admin.panel.dashboard'), page: PageTypes.Dashboard },
         { label: t('admin.panel.products'), page: PageTypes.Products },
+        { label: t('admin.panel.filters'), page: PageTypes.Filters },
         { label: t('admin.panel.users'), page: PageTypes.Users },
         { label: t('admin.panel.settings'), page: PageTypes.Settings },
     ]

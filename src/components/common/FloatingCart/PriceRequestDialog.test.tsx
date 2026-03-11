@@ -4,6 +4,7 @@ import { CartItem } from '@app-types/cart';
 import { ProductType } from '@constants/index';
 
 jest.mock('react-i18next', () => ({
+  initReactI18next: { type: '3rdParty', init: () => undefined },
   useTranslation: () => ({
     t: (key: string) => key,
   }),
@@ -79,7 +80,7 @@ describe('PriceRequestDialog validation', () => {
     fireEvent.change(getByLabelText('cart.form.email'), { target: { value: 'alice@example.com' } });
     await waitFor(() => expect(submit).not.toBeDisabled());
 
-    fireEvent.change(getByLabelText('cart.form.phone'), { target: { value: 'abc' } });
+    fireEvent.change(getByLabelText('cart.form.phone'), { target: { value: '123' } });
     await waitFor(() => expect(submit).toBeDisabled());
 
     fireEvent.change(getByLabelText('cart.form.phone'), { target: { value: '+90 212 000 00 00' } });
@@ -104,7 +105,7 @@ describe('PriceRequestDialog validation', () => {
       requesterName: 'Alice',
       companyName: '',
       email: 'alice@example.com',
-      phone: '+90 212 000 00 00',
+      phone: '902120000000',
       note: '',
     });
   });

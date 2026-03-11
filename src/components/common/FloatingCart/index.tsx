@@ -9,6 +9,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
 import styles from './style.module.scss';
+import { getActiveLanguage, getLocalizedProductText } from '../../../utils';
 
 interface FloatingCartProps {
   items: CartItem[];
@@ -36,6 +37,7 @@ const FloatingCart: React.FC<FloatingCartProps> = ({
   isFullyPriced,
 }) => {
   const { t } = useTranslation();
+  const lang = getActiveLanguage();
 
   const totalQuantity = items.reduce((sum, current) => sum + current.quantity, 0);
   const priceAggregation = items.reduce(
@@ -97,6 +99,7 @@ const FloatingCart: React.FC<FloatingCartProps> = ({
 
           <Box className={styles.cart__items}>
             {items.map((item) => {
+              const localizedName = getLocalizedProductText(item.product, 'name', lang);
               const priceText = item.product.price?.amount
                 ? `${item.product.price.amount} ${item.product.price.currency}`
                 : t('cart.onDemand');
@@ -105,7 +108,7 @@ const FloatingCart: React.FC<FloatingCartProps> = ({
                 <Box key={item.key} className={styles.cart__item}>
                   <Box className={styles.cart__itemInfo}>
                     <Typography variant="subtitle2" fontWeight={600}>
-                      {item.product.name}
+                      {localizedName}
                     </Typography>
                     {item.product.productNo && (
                       <Typography variant="caption" color="text.secondary">

@@ -4,6 +4,7 @@ import { CartItem } from '@app-types/cart';
 import { ProductType } from '@constants/index';
 
 jest.mock('react-i18next', () => ({
+  initReactI18next: { type: '3rdParty', init: () => undefined },
   useTranslation: () => ({
     t: (key: string, params?: Record<string, unknown>) =>
       params && Object.prototype.hasOwnProperty.call(params, 'count')
