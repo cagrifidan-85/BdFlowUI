@@ -1,4 +1,4 @@
-import { Box, Select, IconButton, Typography, Link, FormControl, MenuItem, Alert, Snackbar } from '@mui/material';
+import { Box, Select, IconButton, Typography, Link, FormControl, MenuItem, Snackbar, Alert } from '@mui/material';
 import React from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import styles from './style.module.scss';
@@ -10,6 +10,8 @@ import FloatingCart from '@components/common/FloatingCart';
 import PriceRequestDialog from '@components/common/FloatingCart/PriceRequestDialog';
 import { CartItem, PriceRequestFormValues } from '@app-types/cart';
 import { useSendPriceRequestMutation } from '@apis/priceRequests';
+import { ResultModal } from '@components/common/ResultModal';
+import { getActiveLanguage, getLocalizedProductText } from '../../../../../utils';
 
 
 
@@ -27,19 +29,26 @@ interface ChooseProductProps {
 
 const ChooseProduct = ({ products, onItemSelected, onBack, material, environment, filtersData }: ChooseProductProps) => {
     const { t } = useTranslation();
-    const lang = (localStorage.getItem('currentLang') as 'tr' | 'en') || 'tr'
+    const lang = getActiveLanguage();
     const [filters, setFilters] = React.useState<{ [key: string]: FilterBaseModel }>({});
     const [cartItems, setCartItems] = React.useState<CartItem[]>([]);
     const [isCartCollapsed, setIsCartCollapsed] = React.useState(false);
     const [isPriceRequestOpen, setIsPriceRequestOpen] = React.useState(false);
-    const [feedback, setFeedback] = React.useState<{ type: 'success' | 'error'; message: string } | null>(null);
+    const [toast, setToast] = React.useState<{ type: 'success' | 'error'; message: string } | null>(null);
+    const [requestResult, setRequestResult] = React.useState({
+        open: false,
+        isSuccess: true,
+        message: '',
+        isLoading: false,
+    });
     const [sendPriceRequest, { isLoading: isSendingRequest }] = useSendPriceRequestMutation();
     const isCartFullyPriced = React.useMemo(
         () => cartItems.length > 0 && cartItems.every((item) => typeof item.product.price?.amount === 'number' && item.product.price.amount >= 0),
         [cartItems]
     );
 
-    const resolveProductKey = (product: ProductType) => product.id || product.productNo || product.name;
+    const resolveProductKey = (product: ProductType) =>
+        product.id || product.productNo || product.name || product.nameEn || product.catalogUrl || product.image;
     const resolveFilterLabel = (options?: FilterBaseModel[], code?: string) => {
         if (!code || !options) {
             return undefined;
@@ -55,7 +64,7 @@ const ChooseProduct = ({ products, onItemSelected, onBack, material, environment
     }, [cartItems.length]);
 
     const showSnackbar = (type: 'success' | 'error', message: string) => {
-        setFeedback({ type, message });
+        setToast({ type, message });
     };
 
     const handleAddToCart = (product: ProductType) => {
@@ -88,7 +97,8 @@ const ChooseProduct = ({ products, onItemSelected, onBack, material, environment
         });
 
         setIsCartCollapsed(false);
-        showSnackbar('success', t('cart.messages.added', { product: product.name }));
+        const localizedName = getLocalizedProductText(product, 'name', lang);
+        showSnackbar('success', t('cart.messages.added', { product: localizedName }));
     };
 
     const handleIncrement = (itemKey: string) => {
@@ -121,6 +131,14 @@ const ChooseProduct = ({ products, onItemSelected, onBack, material, environment
 
     const handleSubmitPriceRequest = async (values: PriceRequestFormValues) => {
         try {
+            setRequestResult({
+                open: true,
+                isSuccess: false,
+                message: t('cart.actions.sending'),
+                isLoading: true,
+            });
+            setIsPriceRequestOpen(false);
+
             await sendPriceRequest({
                 ...values,
                 items: cartItems.map((item) => ({
@@ -134,11 +152,20 @@ const ChooseProduct = ({ products, onItemSelected, onBack, material, environment
                 })),
             }).unwrap();
 
-            setIsPriceRequestOpen(false);
             setCartItems([]);
-            showSnackbar('success', t('cart.messages.sent'));
+            setRequestResult({
+                open: true,
+                isSuccess: true,
+                message: t('cart.messages.sent'),
+                isLoading: false,
+            });
         } catch (error) {
-            showSnackbar('error', t('cart.messages.sendFailed'));
+            setRequestResult({
+                open: true,
+                isSuccess: false,
+                message: t('cart.messages.sendFailed'),
+                isLoading: false,
+            });
         }
     };
 
@@ -150,14 +177,14 @@ const ChooseProduct = ({ products, onItemSelected, onBack, material, environment
         setIsPriceRequestOpen(true);
     };
 
-    const filterLabels: { [key: string]: string } = {
-        'sensors': 'Sensör Tipi',
-        'connectionTypes': 'Bağlantı Tipi',
-        'properties': 'Özellikler',
-        'electronics': 'Elektronik',
-        'materials': 'Malzeme',
-        'environments': 'Ortam',
-        'categories': 'Kategori',
+    const filterLabelKeyMap: Record<string, string> = {
+        sensors: 'chooseProduct.filters.sensors',
+        connectionTypes: 'chooseProduct.filters.connectionTypes',
+        properties: 'chooseProduct.filters.properties',
+        electronics: 'chooseProduct.filters.electronics',
+        materials: 'chooseProduct.filters.materials',
+        environments: 'chooseProduct.filters.environments',
+        categories: 'chooseProduct.filters.categories',
     };
 
     const handleChangeFilter = (filterKey: string, selectedItem: FilterBaseModel | null) => {
@@ -178,7 +205,7 @@ const ChooseProduct = ({ products, onItemSelected, onBack, material, environment
         return (
             <Box className={styles.chooseProduct__filterCard}>
                 <Typography className={styles.chooseProduct__filterLabel}>
-                    {filterLabels[filterKey]}
+                    {t(filterLabelKeyMap[filterKey] || 'filters')}
                 </Typography>
                 <FormControl size="small" className={styles.chooseProduct__filterSelect}>
                     <Select
@@ -348,19 +375,25 @@ const ChooseProduct = ({ products, onItemSelected, onBack, material, environment
             )}
 
             <Snackbar
-                open={Boolean(feedback)}
-                autoHideDuration={3500}
+                open={Boolean(toast)}
+                autoHideDuration={3000}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                onClose={() => setFeedback(null)}
+                onClose={() => setToast(null)}
             >
-                {feedback
-                    ? (
-                        <Alert severity={feedback.type} onClose={() => setFeedback(null)}>
-                            {feedback.message}
-                        </Alert>
-                    )
-                    : undefined}
+                {toast ? (
+                    <Alert severity={toast.type} onClose={() => setToast(null)}>
+                        {toast.message}
+                    </Alert>
+                ) : undefined}
             </Snackbar>
+
+            <ResultModal
+                open={requestResult.open}
+                isSuccess={requestResult.isSuccess}
+                isLoading={requestResult.isLoading}
+                message={requestResult.message}
+                onClose={() => setRequestResult((prev) => ({ ...prev, open: false }))}
+            />
         </Box>
     )
 }

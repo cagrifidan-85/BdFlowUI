@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import styles from './style.module.scss';
+import { getActiveLanguage, getLocalizedProductText } from '../../../utils';
 
 interface PriceRequestDialogProps {
   open: boolean;
@@ -40,6 +41,7 @@ const PriceRequestDialog: React.FC<PriceRequestDialogProps> = ({
   isOrderMode,
 }) => {
   const { t } = useTranslation();
+  const lang = getActiveLanguage();
   const [formValues, setFormValues] = useState<PriceRequestFormValues>(emptyForm);
   const [errors, setErrors] = useState<Partial<Record<keyof PriceRequestFormValues, string>>>({});
   const dialogTitle = isOrderMode ? t('cart.dialog.orderTitle') : t('cart.dialog.title');
@@ -50,7 +52,7 @@ const PriceRequestDialog: React.FC<PriceRequestDialogProps> = ({
   const trimmedPhone = formValues.phone.trim();
   const hasIdentity = Boolean(trimmedName || trimmedCompany);
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const phonePattern = /^[0-9()+\-\s]{6,}$/;
+  const phonePattern = /^[0-9]{6,}$/;
   const hasEmail = Boolean(trimmedEmail);
   const hasPhone = Boolean(trimmedPhone);
   const isEmailFormatValid = !hasEmail || emailPattern.test(trimmedEmail);
@@ -126,11 +128,13 @@ const PriceRequestDialog: React.FC<PriceRequestDialogProps> = ({
               {t('cart.dialog.empty')}
             </Typography>
           )}
-          {items.map((item) => (
-            <Box key={item.key} className={styles.cartDialog__listItem}>
+          {items.map((item) => {
+            const localizedName = getLocalizedProductText(item.product, 'name', lang);
+            return (
+              <Box key={item.key} className={styles.cartDialog__listItem}>
               <Box>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  {item.product.name}
+                  {localizedName}
                 </Typography>
                 {item.product.productNo && (
                   <Typography variant="caption" color="text.secondary">
@@ -164,7 +168,8 @@ const PriceRequestDialog: React.FC<PriceRequestDialogProps> = ({
                 )}
               </Box>
             </Box>
-          ))}
+            );
+          })}
         </Box>
 
         <Box mt={3}>
@@ -210,12 +215,16 @@ const PriceRequestDialog: React.FC<PriceRequestDialogProps> = ({
               <TextField
                 label={t('cart.form.phone')}
                 value={formValues.phone}
-                onChange={(event) => handleChange('phone', event.target.value)}
+                onChange={(event) => {
+                  const digitsOnly = event.target.value.replace(/[^0-9]/g, '');
+                  handleChange('phone', digitsOnly);
+                }}
                 fullWidth
                 placeholder={t('cart.form.placeholder.phone')}
                 error={Boolean(errors.phone)}
                 helperText={errors.phone}
                 disabled={isSubmitting}
+                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>

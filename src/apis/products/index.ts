@@ -1,7 +1,6 @@
 
 import { baseApi } from '../index';
-import { ProductFiltersModel, ProductType } from '@constants/index';
-
+import { FilterBaseModel, ProductFilterGroup, ProductFiltersModel, ProductType } from '@constants/index';
 
 export interface UpdateProductRequest extends Partial<ProductType> {
     id: string;
@@ -11,6 +10,18 @@ export interface UploadImageResponse {
     message: string;
     url: string;
     publicId: string;
+}
+
+export interface CreateFilterOptionRequest {
+    group: ProductFilterGroup;
+    code: string;
+    tr: string;
+    en: string;
+}
+
+export interface DeleteFilterOptionRequest {
+    group: ProductFilterGroup;
+    code: string;
 }
 
 export const productsApi = baseApi.injectEndpoints({
@@ -87,7 +98,25 @@ export const productsApi = baseApi.injectEndpoints({
             }),
         }),
         getFilters: builder.query<ProductFiltersModel, void>({
-            query: () => '/api/products/filters/all',
+            query: () => '/api/filters',
+            providesTags: [{ type: 'Filters', id: 'LIST' }],
+        }),
+
+        createFilterOption: builder.mutation<{ message: string; data: FilterBaseModel }, CreateFilterOptionRequest>({
+            query: ({ group, code, tr, en }) => ({
+                url: `/api/filters/${group}`,
+                method: 'POST',
+                body: { code, tr, en },
+            }),
+            invalidatesTags: [{ type: 'Filters', id: 'LIST' }],
+        }),
+
+        deleteFilterOption: builder.mutation<{ message: string }, DeleteFilterOptionRequest>({
+            query: ({ group, code }) => ({
+                url: `/api/filters/${group}/${code}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: [{ type: 'Filters', id: 'LIST' }],
         }),
 
     }),
@@ -103,4 +132,6 @@ export const {
     useUploadImageMutation,
     useDeleteImageMutation,
     useGetFiltersQuery,
+    useCreateFilterOptionMutation,
+    useDeleteFilterOptionMutation,
 } = productsApi;

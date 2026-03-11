@@ -1,8 +1,9 @@
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, waitFor, act } from "@testing-library/react";
 import CreateProduct from "./index";
 import { ProductFiltersModel } from "@constants/index";
 
 jest.mock("react-i18next", () => ({
+  initReactI18next: { type: "3rdParty", init: () => undefined },
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 
@@ -45,16 +46,20 @@ describe("CreateProduct", () => {
     expect(getByText("save")).toBeDisabled();
   });
 
-  test("currency select enables when price amount is set", () => {
+  test("currency select enables when price amount is set", async () => {
     const { getByLabelText } = render(<CreateProduct filters={filters} open onClose={jest.fn()} />);
 
     const priceInput = getByLabelText("admin.products.create.pricePlaceholder");
-    const currencySelect = getByLabelText("Para Birimi");
+    const currencySelect = getByLabelText("admin.products.edit.currencyLabel");
 
     expect(currencySelect).toHaveAttribute("aria-disabled", "true");
 
-    fireEvent.change(priceInput, { target: { value: "100" } });
+    await act(async () => {
+      fireEvent.change(priceInput, { target: { value: "100" } });
+    });
 
-    expect(currencySelect).not.toHaveAttribute("aria-disabled", "true");
+    await waitFor(() => {
+      expect(currencySelect).not.toHaveAttribute("aria-disabled", "true");
+    });
   });
 });

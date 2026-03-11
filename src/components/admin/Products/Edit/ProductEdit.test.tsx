@@ -3,6 +3,7 @@ import { ProductEdit } from "./index";
 import { ProductType } from "@constants/index";
 
 jest.mock("react-i18next", () => ({
+  initReactI18next: { type: "3rdParty", init: () => undefined },
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 
@@ -31,6 +32,16 @@ const product: ProductType = {
   category: "cat",
 };
 
+const filters = {
+  categories: [{ code: "cat", en: "Cat", tr: "Kategori" }],
+  materials: [{ code: "mat", en: "Mat", tr: "Malzeme" }],
+  environments: [{ code: "env", en: "Env", tr: "Ortam" }],
+  connectionTypes: [{ code: "conn", en: "Conn", tr: "Baglanti" }],
+  electronics: [{ code: "elec", en: "Elec", tr: "Elektronik" }],
+  properties: [{ code: "prop", en: "Prop", tr: "Ozellik" }],
+  sensors: [{ code: "sensor", en: "Sens", tr: "Sensor" }],
+};
+
 describe("ProductEdit", () => {
   beforeEach(() => {
     localStorage.setItem("currentLang", "en");
@@ -39,7 +50,7 @@ describe("ProductEdit", () => {
   test("renders actions and currency select enabled", () => {
     const { getByText, getByLabelText } = render(
       <ProductEdit
-        filters={{ categories: [{ code: "cat", en: "Cat", tr: "Kategori" }] }}
+        filters={filters}
         product={product}
         open
         onClose={jest.fn()}

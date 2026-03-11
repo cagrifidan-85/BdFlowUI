@@ -1,7 +1,7 @@
 import { Box, Grid, Modal, Typography, TextField, Button, MenuItem } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import styles from "./style.module.scss"
-import { ProductType, ProductFiltersModel } from "@constants/index";
+import { ProductType, ProductFiltersModel, FilterBaseModel } from "@constants/index";
 import { useCreateProductMutation } from "@apis/products";
 import { useForm, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
@@ -22,9 +22,19 @@ const CURRENCIES = [
     { value: 'GBP', label: '£ GBP' },
 ];
 
+const getOptionLabel = (option: FilterBaseModel) => {
+    const trLabel = option.tr?.trim();
+    const enLabel = option.en?.trim();
+
+    if (trLabel && enLabel) {
+        return `${trLabel} / ${enLabel}`;
+    }
+
+    return trLabel || enLabel || option.code;
+};
+
 const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose }) => {
     const { t } = useTranslation()
-    const lang = localStorage.getItem('currentLang');
     const [createProduct, { isLoading }] = useCreateProductMutation();
     const { uploadSingleFile } = useUploadFile();
 
@@ -78,18 +88,19 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
 
             const res = await createProduct(payload).unwrap();
             if (res) {
-                setResultContent(true, "Product created successfully", true);
+                setResultContent(true, t('admin.products.create.successMessage'), true);
                 handleClose();
             }
         } catch (error: any) {
-            const message = error?.data?.message?.toString?.() || "An error occurred";
-            setResultContent(false, message, true);
+            const serverMessage = error?.data?.message?.toString?.();
+            const fallbackMessage = t('admin.products.create.errorMessage');
+            setResultContent(false, serverMessage || fallbackMessage, true);
         }
     }
 
     return (
         <Modal
-            open={isOpenSnackBar}
+            open={open}
             onClose={handleClose}
             style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
 
@@ -114,6 +125,19 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                                 label={t('admin.products.create.productNamePlaceholder')}
                                                 error={!!errors.name}
                                                 helperText={errors.name?.message}
+                                            />
+                                        )}
+                                    />
+                                </Grid>
+                                <Grid size={{ xs: 12, sm: 6 }}>
+                                    <Controller
+                                        name="nameEn"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <TextField
+                                                {...field}
+                                                fullWidth
+                                                label={`${t('admin.products.create.productNamePlaceholder')} (EN)`}
                                             />
                                         )}
                                     />
@@ -176,7 +200,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                                         {...field}
                                                         fullWidth
                                                         select
-                                                        label="Para Birimi"
+                                                        label={t('admin.products.edit.currencyLabel')}
                                                         disabled={isCurrencyDisabled}
                                                         error={!!errors.price?.currency}
                                                         helperText={errors.price?.currency?.message}
@@ -208,7 +232,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                             >
                                                 {filters?.categories?.map((category) => (
                                                     <MenuItem key={category.code} value={category.code}>
-                                                        {category[lang as 'tr' | 'en']}
+                                                        {getOptionLabel(category)}
                                                     </MenuItem>
                                                 ))}
                                             </TextField>
@@ -231,7 +255,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                             >
                                                 {filters?.materials?.map((material) => (
                                                     <MenuItem key={material.code} value={material.code}>
-                                                        {material[lang as 'tr' | 'en']}
+                                                        {getOptionLabel(material)}
                                                     </MenuItem>
                                                 ))}
                                             </TextField>
@@ -254,7 +278,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                             >
                                                 {filters?.environments?.map((env) => (
                                                     <MenuItem key={env.code} value={env.code}>
-                                                        {env[lang as 'tr' | 'en']}
+                                                        {getOptionLabel(env)}
                                                     </MenuItem>
                                                 ))}
                                             </TextField>
@@ -278,7 +302,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                             >
                                                 {filters?.connectionTypes?.map((conn) => (
                                                     <MenuItem key={conn.code} value={conn.code}>
-                                                        {conn[lang as 'tr' | 'en']}
+                                                        {getOptionLabel(conn)}
                                                     </MenuItem>
                                                 ))}
                                             </TextField>
@@ -302,7 +326,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                             >
                                                 {filters && filters.electronics?.map((elec) => (
                                                     <MenuItem key={elec.code} value={elec.code}>
-                                                        {elec[lang as 'tr' | 'en']}
+                                                        {getOptionLabel(elec)}
                                                     </MenuItem>
                                                 ))}
                                             </TextField>
@@ -325,7 +349,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                             >
                                                 {filters && filters.properties?.map((prop) => (
                                                     <MenuItem key={prop.code} value={prop.code}>
-                                                        {prop[lang as 'tr' | 'en']}
+                                                        {getOptionLabel(prop)}
                                                     </MenuItem>
                                                 ))}
                                             </TextField>
@@ -348,7 +372,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                             >
                                                 {filters && filters.sensors?.map((sensor) => (
                                                     <MenuItem key={sensor.code} value={sensor.code}>
-                                                        {sensor[lang as 'tr' | 'en']}
+                                                        {getOptionLabel(sensor)}
                                                     </MenuItem>
                                                 ))}
                                             </TextField>
@@ -366,6 +390,21 @@ const CreateProduct: React.FC<CreateProductProps> = ({ filters, open, onClose })
                                                 multiline
                                                 rows={4}
                                                 label={t('admin.products.create.descriptionPlaceholder')}
+                                            />
+                                        )}
+                                    />
+                                </Grid>
+                                <Grid size={{ xs: 12 }}>
+                                    <Controller
+                                        name="descriptionEn"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <TextField
+                                                {...field}
+                                                fullWidth
+                                                multiline
+                                                rows={4}
+                                                label={`${t('admin.products.create.descriptionPlaceholder')} (EN)`}
                                             />
                                         )}
                                     />

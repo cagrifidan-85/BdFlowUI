@@ -18,6 +18,7 @@ app.use('/api/products', require('./routes/products'));
 app.use('/api/images', require('./routes/images'));
 app.use('/api/settings', require('./routes/settings'));
 app.use('/api/price-requests', require('./routes/priceRequests'));
+app.use('/api/filters', require('./routes/filters'));
 
 // Health check
 app.get('/api/health', (req, res) => {
